@@ -39,9 +39,7 @@ enum EventCode
 	onSendCommand, //OK intercept
 	onReceiveMsg, //OK intercept
 	onReceivePacket, //OK intercept
-	onSendMsg, //OK intercept
-	onRecallMsg, //OK intercept
-	onStop, //OK intercept
+	onStop, //OK
 	onLogin, //OK
 	onImport, //OK
 };

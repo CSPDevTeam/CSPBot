@@ -123,12 +123,10 @@ void Server::run() {
 					string _line = m_replace(i, "\n", "");
 					_line = m_replace(_line, "\r", "");
 					if (_line != "") {
-						
-							QString qline = stdString2QString(_line);
-							win->ipipelog(_line);
-							catchInfo(qline);
-							selfCatchLine(qline);
-						
+						QString qline = stdString2QString(_line);
+						win->ipipelog(_line);
+						catchInfo(qline);
+						selfCatchLine(qline);
 					}
 				}
 			}
@@ -166,11 +164,11 @@ bool Server::sendCmd(string cmd) {
 		}
 
 		//Callback
-		Callbacker cbe(EventCode::onSendCommand);
+		/*Callbacker cbe(EventCode::onSendCommand);
 		cbe.insert("cmd", py::str(cmd));
 		if (!cbe.callback()) {
 			return false;
-		}
+		}*/
 
 		if (!WriteFile(this->g_hChildStd_IN_Wr, cmd.c_str(),cmd.length(), &this->ReadNum, NULL))
 		{
@@ -224,8 +222,7 @@ void ServerPoll::run() {
 			win->chLabel("version","");
 
 			//Callback
-			Callbacker cbe(EventCode::onServerStop);
-			cbe.callback();
+			win->ThreadCallback(1);
 			if (server->normalStop) {
 				server->TypeOfStop = normal;
 			}

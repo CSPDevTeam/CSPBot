@@ -46,6 +46,19 @@ public:
     inline void ThreadCallback(int t) {
         emit signal_ThreadCallback(t);
     }
+
+    inline void PacketCallback(string msg) {
+        QString msgDict;
+        msgDict = stdString2QString(msg);
+        emit signal_PacketCallback(msgDict);
+    }
+    inline void MsgCallback(string group,string qq,string msg) {
+        QString QGroup,QQq,QMsg;
+        QGroup = stdString2QString(group);
+        QQq = stdString2QString(qq);
+        QMsg = stdString2QString(msg);
+        emit signal_MsgCallback(QGroup,QQq,QMsg);
+    }
     void InitPlayerTableView(QTableView* t, string head[], int head_length);
     void InitRegularTableView(QTableView* t, string head[], int head_length);
     void InitPluginTableView(QTableView* t, string head[], int head_length);
@@ -58,6 +71,8 @@ signals:
     void enableForce(bool a);
     void updateText(QString name, QString text);
     void signal_ThreadCallback(int t);
+    void signal_PacketCallback(QString dict);
+    void signal_MsgCallback(QString QGroup, QString QQq, QString QMsg);
 private slots:
     void on_actionMinimize_triggered();//最小化窗口
     void on_actionClose_triggered();//关闭窗口
@@ -74,6 +89,8 @@ private slots:
     void InitTable();
     void ReloadPlugin();
     void slotCallback(int t);
+    void slotPacketCallback(QString dict);
+    void slotMsgCallback(QString QGroup, QString QQq, QString QMsg);
 private:
     Ui::CSPBotClass ui;
     void mouseMoveEvent(QMouseEvent* event);

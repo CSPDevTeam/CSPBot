@@ -73,22 +73,12 @@ void onText(WebSocketClient& client, string msg) {
 	string syncId = msg_json["syncId"].get<string>();
 	mirai_logger->debug(msg_json.dump());
 
-	Callbacker packetcbe(EventCode::onReceivePacket);
-	//转换为dict
-	py::module pyJsonModule = py::module::import("json");
-	py::dict msgDict = pyJsonModule.attr("loads")(msg);
-	packetcbe.insert("msg", msgDict);
-	if (!packetcbe.callback()) {
-		return;
-	}
-
+	win->PacketCallback(msg);
 	//登录包
 	if (syncId == "1") {
 		mirai_logger->info(u8"{}登录 Mirai 成功", msg_json["data"]["nickname"].get<string>());
 		mi->logined = true;
-
-		Callbacker cbe(EventCode::onLogin);
-		cbe.callback();
+		win->ThreadCallback(2);
 	}
 	//发消息包
 	else if (syncId == "2") {
@@ -166,13 +156,8 @@ void onText(WebSocketClient& client, string msg) {
 					}
 				}
 				msg = msg.erase(0, 1);
-				Callbacker msgcbe(EventCode::onReceiveMsg);
-				msgcbe.insert("group", py::str(group));
-				msgcbe.insert("qq", py::str(qq));
-				msgcbe.insert("msg", py::str(msg));
-				if (msgcbe.callback()) {
-					selfGroupCatchLine(stdString2QString(msg), group, qq);
-				}
+				win->MsgCallback(group, qq, msg);
+				selfGroupCatchLine(stdString2QString(msg), group, qq);
 			}
 		}
 		//事件处理(群成员改名)
@@ -298,13 +283,7 @@ void Mirai::sendGroupMsg(string group, string msg) {
 	if (this->logined) {
 		string mj = "{\"syncId\": 2, \"command\":\"sendGroupMessage\", \"subCommand\" : null,\
 					\"content\": {\"target\":" + group + ", \"messageChain\": [{ \"type\":\"Plain\", \"text\" : \"" + msg + "\"}]}}";
-		
-		Callbacker cbe(EventCode::onSendMsg);
-		cbe.insert("group", py::str(group));
-		cbe.insert("msg", py::str(msg));
-		if (cbe.callback()) {
-			this->ws->send(mj);
-		}
+		this->ws->send(mj);
 	}
 
 }
@@ -313,11 +292,7 @@ void Mirai::recallMsg(string target) {
 	//recall
 	if (this->logined) {
 		string mj = "{\"syncId\": 3,\"command\" : \"recall\",\"subCommand\":null,\"content\":{\"target\":" + target + "}}";
-		Callbacker cbe(EventCode::onRecallMsg);
-		cbe.insert("target", py::str(target));
-		if (cbe.callback()) {
-			this->ws->send(mj);
-		}
+		this->ws->send(mj);
 	}
 }
 

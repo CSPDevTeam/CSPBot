@@ -131,6 +131,31 @@ void CSPBot::slotCallback(int t) {
         Callbacker OneCallbacker(EventCode::onServerStop);
         OneCallbacker.callback();
     }
+    else if (t == 2) {
+        Callbacker OneCallbacker(EventCode::onLogin);
+        OneCallbacker.callback();
+    }
+}
+
+void CSPBot::slotPacketCallback(QString dict) {
+    string strDict = QString2stdString(dict);
+    //转换为dict
+    Callbacker packetcbe(EventCode::onReceivePacket);
+    py::module pyJsonModule = py::module::import("json");
+    py::dict msgDict = pyJsonModule.attr("loads")(strDict);
+    packetcbe.insert("msg", msgDict);
+    bool pakctecb = packetcbe.callback();
+}
+
+void CSPBot::slotMsgCallback(QString QGroup, QString QQq, QString QMsg) {
+    string group = QString2stdString(QGroup);
+    string qq = QString2stdString(QQq);
+    string msg = QString2stdString(QMsg);
+    Callbacker msgcbe(EventCode::onReceiveMsg);
+    msgcbe.insert("group", py::str(group));
+    msgcbe.insert("qq", py::str(qq));
+    msgcbe.insert("msg", py::str(msg));
+    bool cbe = msgcbe.callback();
 }
 
 CSPBot::CSPBot(QWidget *parent)
@@ -196,6 +221,7 @@ CSPBot::CSPBot(QWidget *parent)
     connect(this, SIGNAL(enableForce(bool)), this, SLOT(changeenableForce(bool)));
     connect(this, SIGNAL(updateText(QString, QString)), this, SLOT(upText(QString, QString)));
     connect(this, SIGNAL(signal_ThreadCallback(int)), this, SLOT(slotCallback(int)));
+    connect(this, SIGNAL(signal_PacketCallback(QString)), this, SLOT(slotPacketCallback(QString)));
     
 }
 
