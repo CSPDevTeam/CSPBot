@@ -1,0 +1,23 @@
+<RCC>
+  <qresource prefix="CSPBot">
+    <file>Images/crontab.svg</file>
+    <file>Images/rizhi.svg</file>
+    <file>Images/chajian1.svg</file>
+    <file>Images/zhengze.svg</file>
+    <file>Images/kongzhitai.svg</file>
+    <file>Images/shezhi.svg</file>
+    <file>Images/wodewanjia.svg</file>
+    <file>Images/x.svg</file>
+    <file>Images/icon.svg</file>
+    <file>Images/zuixiaohua.svg</file>
+  </qresource>
+  <qresource prefix="a">
+    <file>Images/a/1.png</file>
+    <file>Images/a/2.png</file>
+    <file>Images/a/3.png</file>
+    <file>Images/a/4.png</file>
+    <file>Images/a/addpage.png</file>
+    <file>Images/a/subpage.png</file>
+    <file>Images/a/tiao.png</file>
+  </qresource>
+</RCC>

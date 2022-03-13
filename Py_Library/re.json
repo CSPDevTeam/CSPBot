@@ -1,0 +1,287 @@
+{
+    "description": {
+        "extra": [
+            {
+                "bold": true,
+                "color": "white",
+                "text": ""
+            },
+            {
+                "bold": true,
+                "color": "aqua",
+                "text": ""
+            },
+            {
+                "bold": true,
+                "color": "white",
+                "text": ""
+            },
+            {
+                "bold": true,
+                "color": "aqua",
+                "text": "1"
+            },
+            {
+                "bold": true,
+                "color": "aqua",
+                "text": "."
+            },
+            {
+                "bold": true,
+                "color": "aqua",
+                "text": "1"
+            },
+            {
+                "bold": true,
+                "color": "aqua",
+                "text": "6"
+            },
+            {
+                "bold": true,
+                "color": "green",
+                "text": "."
+            },
+            {
+                "bold": true,
+                "color": "green",
+                "text": "x"
+            },
+            {
+                "bold": true,
+                "color": "green",
+                "text": " "
+            },
+            {
+                "bold": true,
+                "color": "green",
+                "text": "\u2714"
+            },
+            {
+                "bold": true,
+                "color": "white",
+                "text": " \n"
+            },
+            {
+                "bold": true,
+                "color": "gray",
+                "text": " "
+            },
+            {
+                "bold": true,
+                "color": "gray",
+                "text": " "
+            },
+            {
+                "bold": true,
+                "color": "gray",
+                "text": " "
+            },
+            {
+                "bold": true,
+                "color": "gray",
+                "text": "\uff31"
+            },
+            {
+                "bold": true,
+                "color": "gray",
+                "text": "\uff31"
+            },
+            {
+                "bold": true,
+                "color": "gray",
+                "text": "\u7fa4"
+            },
+            {
+                "bold": true,
+                "color": "gray",
+                "text": "7"
+            },
+            {
+                "bold": true,
+                "color": "gray",
+                "text": "4"
+            },
+            {
+                "bold": true,
+                "color": "gray",
+                "text": "3"
+            },
+            {
+                "bold": true,
+                "color": "gray",
+                "text": "0"
+            },
+            {
+                "bold": true,
+                "color": "gray",
+                "text": "1"
+            },
+            {
+                "bold": true,
+                "color": "gray",
+                "text": "2"
+            },
+            {
+                "bold": true,
+                "color": "gray",
+                "text": "8"
+            },
+            {
+                "bold": true,
+                "color": "gray",
+                "text": "6"
+            },
+            {
+                "bold": true,
+                "color": "red",
+                "text": "7"
+            },
+            {
+                "bold": true,
+                "color": "yellow",
+                "text": " "
+            },
+            {
+                "bold": true,
+                "color": "yellow",
+                "text": " "
+            },
+            {
+                "bold": true,
+                "color": "yellow",
+                "text": " "
+            },
+            {
+                "bold": true,
+                "color": "yellow",
+                "text": "\uff49"
+            },
+            {
+                "bold": true,
+                "color": "yellow",
+                "text": "\uff30"
+            },
+            {
+                "bold": true,
+                "color": "yellow",
+                "text": ":"
+            },
+            {
+                "bold": true,
+                "color": "yellow",
+                "text": " "
+            },
+            {
+                "bold": true,
+                "color": "white",
+                "text": "\uff4d"
+            },
+            {
+                "bold": true,
+                "color": "white",
+                "text": "\uff43"
+            },
+            {
+                "bold": true,
+                "color": "white",
+                "text": "\uff57"
+            },
+            {
+                "bold": true,
+                "color": "white",
+                "text": "\uff41"
+            },
+            {
+                "bold": true,
+                "color": "white",
+                "text": "\uff4e"
+            },
+            {
+                "bold": true,
+                "color": "white",
+                "text": "\uff4d"
+            },
+            {
+                "bold": true,
+                "color": "white",
+                "text": "\uff45"
+            },
+            {
+                "bold": true,
+                "color": "white",
+                "text": "\uff49"
+            },
+            {
+                "bold": true,
+                "color": "white",
+                "text": "\uff0e"
+            },
+            {
+                "bold": true,
+                "color": "white",
+                "text": "\uff43"
+            },
+            {
+                "bold": true,
+                "color": "white",
+                "text": "\uff4e"
+            },
+            {
+                "bold": true,
+                "color": "white",
+                "text": " "
+            }
+        ],
+        "text": "       "
+    },
+    "players": {
+        "max": 200,
+        "online": 10,
+        "sample": [
+            {
+                "id": "70fdeee0-b1b2-32ed-a84f-0837babea334",
+                "name": "YvRunz"
+            },
+            {
+                "id": "33e1089c-e6c7-3e0a-b2b9-cdc1ff8ca4f9",
+                "name": "LZY3762"
+            },
+            {
+                "id": "1c925a1c-96a3-3064-b17e-2f4e38cfb77c",
+                "name": "Bing_Yu"
+            },
+            {
+                "id": "262b4d88-a5ce-37ca-8229-c118f0b40144",
+                "name": "Walk_with_god"
+            },
+            {
+                "id": "e0ec73b9-53fb-3377-b441-048132b3c128",
+                "name": "Pleiades_IQ"
+            },
+            {
+                "id": "3190ba3c-018e-3a09-a90c-90ff03d2519c",
+                "name": "hongju"
+            },
+            {
+                "id": "61329f32-e23c-3880-9fc2-4ce35d69e2bf",
+                "name": "huoliaoyuan"
+            },
+            {
+                "id": "4cf236ca-c19c-3e3c-8771-18e99acf0cf6",
+                "name": "ChiQing"
+            },
+            {
+                "id": "511b2315-163d-3e63-aa53-632fbf0e2f79",
+                "name": "C_razy"
+            },
+            {
+                "id": "1042633d-291e-37bb-9172-f779319e1e2a",
+                "name": "Coat_oil"
+            }
+        ]
+    },
+    "version": {
+        "name": "Tuinity 1.16.5",
+        "protocol": 754
+    }
+}

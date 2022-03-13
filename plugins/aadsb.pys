@@ -1,0 +1,75 @@
+import bot
+import json
+import threading
+from urllib import parse,request
+import time
+
+logger = bot.Logger("hello")
+
+def recvMsg(data):
+    msg = data["msg"]
+    if("#点歌 " in msg):
+        msg = msg.replace("#点歌 ","")
+
+        url = "http://music.163.com/api/search/get/web?csrf_token=hlpretag=&hlposttag=&s="+parse.quote(msg)+"&type=1&offset=0&total=true&limit=20"
+        logger.debug(url)
+        req = request.Request(url=url) # GET无data项
+        res = request.urlopen(req)
+        res = json.loads(str(res.read(),encoding="utf-8")) # 将返回的bytes类型转为str类型
+        #logger.debug(res)
+        if(res["code"] == 200):
+            xml = '''{
+                    "app": "com.tencent.structmsg",
+                    "desc": "音乐",
+                    "view": "music",
+                    "ver": "0.0.0.1",
+                    "prompt": "[分享]酒醉的蝴蝶(女版)",
+                    "appID": "",
+                    "sourceName": "",
+                    "actionData": "",
+                    "actionData_A": "",
+                    "sourceUrl": "",
+                    "meta": {
+                        "music": {
+                            "action": "",
+                            "android_pkg_name": "",
+                            "app_type": 1,
+                            "appid": 100495085,
+                            "ctime": 1646567739,
+                            "desc": "%Author%",
+                            "jumpUrl": "%Jump%",
+                            "musicUrl": "%music%",
+                            "preview": "%Image%",
+                            "sourceMsgId": "0",
+                            "source_icon": "",
+                            "source_url": "",
+                            "tag": "网易云音乐",
+                            "title": "%Title%",
+                            "uin": 3544175039
+                        }
+                    },
+                    "config": {
+                        "autosize": True,
+                        "ctime": 1646567739,
+                        "forward": True,
+                        "token": "e0023af29b8d86653b374b49d2d7a344",
+                        "type": "normal"
+                    },
+                    "text": "",
+                    "sourceAd": "",
+                    "extra": "{\"app_type\":1,\"appid\":100495085,\"uin\":3544175039}"
+                }'''
+            xml= xml.replace("%Jump%","https:\\/\\/y.music.163.com\\/m\\/song?id=" + str(res["result"]["songs"][0]["id"]))
+            xml= xml.replace("%music%","http:\\/\\/music.163.com\\/song\\/media\\/outer\\/url?id="+str(res["result"]["songs"][0]["id"])+".mp3")
+            xml= xml.replace("%Image%",res["result"]["songs"][0]["artists"][0]["img1v1Url"])
+            xml= xml.replace("%Author%",res["result"]["songs"][0]["artists"][0]["name"])
+            xml= xml.replace("%Title%",res["result"]["songs"][0]["name"])
+            logger.debug(xml)
+            j = "{\"syncId\": 6,\"command\" : \"sendGroupMessage\",\"subCommand\" : null,\"content\" : {\"target\":" + data["group"] + ",\"messageChain\" : [{\"type\": \"Xml\",\"xml\" :" + xml + "}]}}"
+            bot.sendPacket(j)
+    
+bot.setListener("onReceiveMsg",recvMsg)
+def onInitPos():
+    logger.info("初始化...")
+
+onInitPos()

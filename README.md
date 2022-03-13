@@ -1,0 +1,2 @@
+# CSPBot
+A Small bot
