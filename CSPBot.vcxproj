@@ -79,6 +79,12 @@
       <AdditionalLibraryDirectories>$(SolutionDir)include\libs\debug</AdditionalLibraryDirectories>
       <AdditionalDependencies>yaml-cpp.lib;LightWSClient.lib;libcron.lib;python38.lib;fmtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <ClCompile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <ClCompile>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ClCompile>
