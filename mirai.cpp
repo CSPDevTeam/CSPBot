@@ -141,6 +141,7 @@ void onText(WebSocketClient& client, string msg) {
 					else if (i["type"] == "Dice") {
 						msg += u8" [未知消息]";
 					}
+
 					else if (i["type"] == "MusicShare") {
 						msg += u8" [音乐分享]" + i["musicUrl"];
 					}
