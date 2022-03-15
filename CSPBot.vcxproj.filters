@@ -24,6 +24,9 @@
     <Filter Include="Source Files\Plugin">
       <UniqueIdentifier>{0d0d9c22-c062-467c-866b-aac56ed11a5b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Other">
+      <UniqueIdentifier>{e5db4337-ddab-4ea1-a20d-265ab5f782ec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="cspbot.qrc">
@@ -104,5 +107,10 @@
     <QtMoc Include="crontab.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="runner.bat">
+      <Filter>Other</Filter>
+    </None>
   </ItemGroup>
 </Project>
