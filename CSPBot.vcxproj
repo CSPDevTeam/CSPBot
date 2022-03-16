@@ -32,12 +32,12 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>5.14.2_msvc2017_64</QtInstall>
-    <QtModules>core;gui;widgets</QtModules>
+    <QtModules>core;network;gui;widgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
     <QtInstall>5.14.2_msvc2017_64</QtInstall>
-    <QtModules>core;gui;widgets</QtModules>
+    <QtModules>core;network;gui;widgets</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
@@ -55,10 +55,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)include\python;$(SolutionDir)include;$(IncludePath)</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)include\python;$(SolutionDir)include;$(SolutionDir)include\openssl;$(SolutionDir)HeadFile;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)include\python;$(SolutionDir)include;$(IncludePath)</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)include\python;$(SolutionDir)include;$(SolutionDir)HeadFile;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -71,7 +71,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)include\libs\debug</AdditionalLibraryDirectories>
-      <AdditionalDependencies>yaml-cpp.lib;LightWSClient.lib;libcron.lib;python38.lib;fmtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>yaml-cpp.lib;LightWSClient.lib;libcron.lib;python38.lib;fmtd.lib;libssl.lib;libcrypto.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -113,36 +113,46 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="mirai.cpp" />
-    <ClCompile Include="Module.cpp" />
-    <ClCompile Include="PyAPI.cpp" />
-    <ClCompile Include="PyEvent.cpp" />
-    <ClCompile Include="PyModle.cpp" />
-    <ClCompile Include="server.cpp" />
-    <ClCompile Include="stdafx.cpp">
+    <None Include="runner.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="ResoucrceFile\cspbot.ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="HeadFile\cgoMain.h" />
+    <ClInclude Include="HeadFile\CPython.h" />
+    <QtMoc Include="HeadFile\cspbot.h" />
+    <QtMoc Include="HeadFile\crontab.h" />
+    <ClInclude Include="HeadFile\global.h" />
+    <ClInclude Include="HeadFile\logger.h" />
+    <ClInclude Include="HeadFile\mirai.h" />
+    <ClInclude Include="HeadFile\resource.h" />
+    <ClInclude Include="HeadFile\stdafx.h" />
+    <QtMoc Include="HeadFile\server.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ResoucrceFile\CSPBot.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="ResoucrceFile\CSPBot.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="ResoucrceFile\cspbot.qrc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="SouceFile\cspbot.cpp" />
+    <ClCompile Include="SouceFile\logger.cpp" />
+    <ClCompile Include="SouceFile\main.cpp" />
+    <ClCompile Include="SouceFile\mirai.cpp" />
+    <ClCompile Include="SouceFile\Module.cpp" />
+    <ClCompile Include="SouceFile\PyAPI.cpp" />
+    <ClCompile Include="SouceFile\PyEvent.cpp" />
+    <ClCompile Include="SouceFile\PyModle.cpp" />
+    <ClCompile Include="SouceFile\server.cpp" />
+    <ClCompile Include="SouceFile\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <None Include="runner.bat" />
-    <QtRcc Include="cspbot.qrc" />
-    <QtUic Include="cspbot.ui" />
-    <QtMoc Include="cspbot.h" />
-    <ClCompile Include="cspbot.cpp" />
-    <ClCompile Include="logger.cpp" />
-    <ClCompile Include="main.cpp" />
-    <None Include="CSPBot.ico" />
-    <ResourceCompile Include="CSPBot.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="cgoMain.h" />
-    <ClInclude Include="CPython.h" />
-    <ClInclude Include="global.h" />
-    <ClInclude Include="logger.h" />
-    <ClInclude Include="mirai.h" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="stdafx.h" />
-    <QtMoc Include="server.h" />
-    <QtMoc Include="crontab.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
