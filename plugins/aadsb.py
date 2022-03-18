@@ -15,5 +15,3 @@ def onInitPos():
     logger.info("初始化...")
 
 onInitPos()
-
-eval()

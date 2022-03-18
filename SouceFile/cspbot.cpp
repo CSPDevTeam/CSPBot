@@ -686,7 +686,12 @@ void CSPBot::on_actionClose_triggered()
 
 void CSPBot::closeEvent(QCloseEvent* event) {
     if (server!= nullptr && server->started) {
-        auto temp = QMessageBox::warning(this, u8"警告", stdString2QString(u8"服务器还在运行，你是否要关闭?"), QMessageBox::Yes | QMessageBox::No);
+        auto temp = QMessageBox::warning(
+            this, 
+            u8"警告", 
+            u8"服务器还在运行，你是否要关闭?", 
+            QMessageBox::Yes | QMessageBox::No
+        );
         if (temp == QMessageBox::Yes)
         {
             server->forceStopServer();
@@ -706,6 +711,7 @@ void CSPBot::closeEvent(QCloseEvent* event) {
         
     }
 }
+
 
 
 

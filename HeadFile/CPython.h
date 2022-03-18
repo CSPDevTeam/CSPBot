@@ -56,9 +56,7 @@ inline std::unordered_map<EventCode, bool> enableEvent;
 class Callbacker {
 public:
 	Callbacker(EventCode t) :type_(t), arg_() {}
-	~Callbacker() {
-		pluginLogger.debug("{}", arg_.ref_count());
-	}
+	~Callbacker() {}
 
 	//事件回调
 	inline bool callback() {

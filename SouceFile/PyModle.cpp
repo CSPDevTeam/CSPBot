@@ -5,6 +5,7 @@
 #include <unordered_map>
 
 #define PLUGIN_PATH "plugins\\"
+#define PYLIBRARY_PATH "PyLibrary\\"
 
 using namespace std;
 namespace fs = filesystem;
@@ -59,14 +60,16 @@ Plugin* PluginManager::getPlugin(py::module handle) {
 bool PluginManager::LoadPlugin() {
     //加载文件
     try {
+        //添加path
+        py::module sys = py::module::import("sys");
+        sys.attr("path").attr("append")(PLUGIN_PATH);
+        sys.attr("path").attr("append")(PYLIBRARY_PATH);
+
         for (auto& info : fs::directory_iterator(PLUGIN_PATH)) {
             if (info.path().extension() == ".py"||
                 info.path().extension() == ".pyc"||
                 info.path().extension() == ".pyd") {
                 string name(info.path().stem().u8string());
-                //添加path
-                py::module sys = py::module::import("sys");
-                sys.attr("path").attr("append")(PLUGIN_PATH);
 
                 //忽略以'_'开头的文件
                 if (name.front() == '_') {

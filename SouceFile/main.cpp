@@ -22,7 +22,7 @@ using namespace std;
 
 CSPBot* win;
 Server* server = new Server();
-std::string Version = "v0.0.2";
+std::string Version = "v0.0.3";
 
 string getConfig(string key) {
     try {
@@ -39,6 +39,7 @@ bool connectMirai();
 vector<string> split(const string& str, const string& pattern);
 string motdbe(string host);
 string motdje(string host);
+string FmtConsoleRegular(string cmd);
 void InitPython();
 
 Logger logger("main");
@@ -61,6 +62,8 @@ int main(int argc, char *argv[])
 
     //连接Mirai
     connectMirai();
+
+    qDebug() << stdString2QString(FmtConsoleRegular(u8"sb {second}"));
 
     return a.exec();
 }

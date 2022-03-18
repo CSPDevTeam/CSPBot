@@ -24,6 +24,7 @@ enum stopType :int {
 
 void catchInfo(QString line);
 string getConfig(string key);
+string FmtConsoleRegular(string cmd);
 QString stdString2QString(std::string str);
 std::string QString2stdString(QString str);
 void selfCatchLine(QString qline);
@@ -294,11 +295,12 @@ void selfCatchLine(QString line) {
 			}
 			if(Action_type == "<<") {
 				string cmd = Action.erase(0, 2);
+				cmd = FmtConsoleRegular(cmd);
 				server->sendCmd(cmd+"\n");
 			}
 			else if (Action_type == ">>") {
 				string cmd = Action.erase(0, 2);
-				qDebug() << stdString2QString(cmd);
+				cmd = FmtConsoleRegular(cmd);
 				mi->sendAllGroupMsg(cmd);
 			}
 			else {

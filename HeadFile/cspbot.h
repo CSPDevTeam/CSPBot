@@ -88,6 +88,8 @@ public:
     void InitRegularTableView(QTableView* t, string head[], int head_length);
     void InitPluginTableView(QTableView* t, string head[], int head_length);
 
+    //HTTP请求
+    void onSendHttpsRequest();
     
 //Signals信号
 signals:

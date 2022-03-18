@@ -10,6 +10,7 @@
 class Callbacker;
 string getConfig(string key);
 QString stdString2QString(std::string str);
+string FmtGroupRegular(string qqid,string qqnick,string cmd);
 
 //构建Client
 Logger* mirai_logger = new Logger("Mirai");
@@ -17,7 +18,7 @@ std::string QString2stdString(QString str);
 Mirai* mi = new Mirai();
 string m_replace(string strSrc, const string& oldStr, const string& newStr, int count = -1);
 
-void selfGroupCatchLine(QString line,string group="0",string qq="0") {
+void selfGroupCatchLine(QString line,string group="0",string qq="0",string qqnick="") {
 	YAML::Node regular = YAML::LoadFile("data/regular.yml");
 	YAML::Node config = YAML::LoadFile("config/config.yml");
 	//读取正则组
@@ -49,10 +50,12 @@ void selfGroupCatchLine(QString line,string group="0",string qq="0") {
 			}
 			if (Action_type == "<<") {
 				string cmd = Action.erase(0, 2);
+				cmd = FmtGroupRegular(qq, qqnick, cmd);
 				server->sendCmd(cmd + "\n");
 			}
 			else if (Action_type == ">>") {
 				string cmd = Action.erase(0, 2);
+				cmd = FmtGroupRegular(qq, qqnick, cmd);
 				mi->sendAllGroupMsg(cmd);
 			}
 			else {
@@ -90,6 +93,7 @@ void onText(WebSocketClient& client, string msg) {
 		//消息处理
 		if (msg_json["data"].find("type")!=msg_json["data"].end() && msg_json["data"]["type"] == "GroupMessage") {
 			string qq = std::to_string(msg_json["data"]["sender"]["id"].get<long long>());
+			string qqnick = msg_json["data"]["sender"]["memberName"].get<string>();
 			string group = std::to_string(msg_json["data"]["sender"]["group"]["id"].get<long long>());
 			string msg = "";
 
@@ -161,8 +165,9 @@ void onText(WebSocketClient& client, string msg) {
 				args.emplace("group", group);
 				args.emplace("msg", msg);
 				args.emplace("qq", qq);
+				args.emplace("qqnick", qqnick);
 				if (win->OtherCallback("onReceiveMsg", args)) {
-					selfGroupCatchLine(stdString2QString(msg), group, qq);
+					selfGroupCatchLine(stdString2QString(msg), group, qq,qqnick);
 				}
 			}
 		}
