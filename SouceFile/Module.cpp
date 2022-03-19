@@ -11,6 +11,8 @@ using namespace std;
 HMODULE h = LoadLibraryA("Motd.dll");
 typedef char*(*funcPtrBE)(char* Host);
 typedef char*(*funcPtrJE)(char* Host);
+QString stdString2QString(std::string str);
+std::string QString2stdString(QString str);
 
 
 string motdbe(string host) {
@@ -82,6 +84,19 @@ bool unbind(string qq) {
 		return false;
 	}
 	return true;
+}
+
+bool bindXuid(string name, string xuid) {
+	YAML::Node player = YAML::LoadFile("data/player.yml");
+	for (YAML::Node i : player) {
+		if(i["playerName"].as<string>() == name) {
+			ofstream fout("data/player.yml");
+			i["xuid"] = xuid;
+			fout << YAML::Dump(player);
+			return true;
+		}
+	}
+	return false;
 }
 
 QString stdString2QString(std::string str) {

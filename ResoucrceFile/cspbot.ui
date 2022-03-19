@@ -697,7 +697,7 @@ QPushButton:pressed{
        </property>
        <property name="styleSheet">
         <string notr="true">border-radius:10px;
-background-color:rgba(86, 166, 209);</string>
+background-color:rgba(86, 166, 209,255);</string>
        </property>
        <widget class="QLabel" name="status">
         <property name="geometry">
@@ -709,7 +709,7 @@ background-color:rgba(86, 166, 209);</string>
          </rect>
         </property>
         <property name="styleSheet">
-         <string notr="true">background-color:rgba(255, 0, 0);
+         <string notr="true">background-color:rgba(255, 0, 0,255);
 border-radius:12px;
 border:2px solid white;</string>
         </property>

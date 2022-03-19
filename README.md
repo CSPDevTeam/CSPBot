@@ -39,5 +39,6 @@
 <details>
 <summary>展开查看</summary>
 2022-3-16(Release v0.0.2)：重新添加了一些监听器
+2022-3-18(Release v0.0.3)：添加了弹窗API，并添加了占位符
 </details>
 

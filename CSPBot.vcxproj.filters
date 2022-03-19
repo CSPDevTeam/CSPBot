@@ -75,6 +75,9 @@
     <ClInclude Include="HeadFile\resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="HeadFile\Command.h">
+      <Filter>Header Files\Basic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="HeadFile\crontab.h">
@@ -131,6 +134,9 @@
       <Filter>Source Files\Basic</Filter>
     </ClCompile>
     <ClCompile Include="SouceFile\server.cpp">
+      <Filter>Source Files\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\Command.cpp">
       <Filter>Source Files\Basic</Filter>
     </ClCompile>
   </ItemGroup>

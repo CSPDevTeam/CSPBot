@@ -62,8 +62,6 @@ int main(int argc, char *argv[])
 
     //连接Mirai
     connectMirai();
-
-    qDebug() << stdString2QString(FmtConsoleRegular(u8"sb {second}"));
-
+    
     return a.exec();
 }

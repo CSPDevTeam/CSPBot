@@ -51,5 +51,3 @@ public:
 signals:
 	void stoped();
 };
-
-void CustomCmd(string cmd,string group="0");

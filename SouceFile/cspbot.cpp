@@ -137,7 +137,6 @@ void CSPBot::slotPacketCallback(QString dict) {
 
 bool CSPBot::slotOtherCallback(QString cbe, const StringMap& qm) {
     string eventName = QString2stdString(cbe);
-    qDebug() << cbe;
     auto event_code = magic_enum::enum_cast<EventCode>(eventName.c_str());
     if (!event_code) {
         return false;

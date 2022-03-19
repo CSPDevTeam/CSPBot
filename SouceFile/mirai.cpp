@@ -6,6 +6,7 @@
 #include <qmessagebox.h>
 #include <qdebug.h>
 #include <string>
+#include "Command.h"
 
 class Callbacker;
 string getConfig(string key);
@@ -59,7 +60,8 @@ void selfGroupCatchLine(QString line,string group="0",string qq="0",string qqnic
 				mi->sendAllGroupMsg(cmd);
 			}
 			else {
-				CustomCmd(Action, group);
+				string ac = FmtGroupRegular(qq, qqnick, Action);
+				Command::CustomCmd(ac, group);
 			}
 		}
 	}

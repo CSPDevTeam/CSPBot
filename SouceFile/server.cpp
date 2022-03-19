@@ -12,14 +12,15 @@
 #include <stdio.h>
 #include "logger.h"
 #include "mirai.h"
+#include <Command.h>
 #include "CPython.h"
 
 using namespace std;
 
 enum stopType :int {
-	normal = 1,
-	force = 2,
-	accident = 3,
+	normal,
+	force,
+	accident,
 } stoptype;
 
 void catchInfo(QString line);
@@ -27,6 +28,7 @@ string getConfig(string key);
 string FmtConsoleRegular(string cmd);
 QString stdString2QString(std::string str);
 std::string QString2stdString(QString str);
+bool bindXuid(string name, string xuid);
 void selfCatchLine(QString qline);
 Logger* serverLogger = new Logger("Server");
 
@@ -165,11 +167,11 @@ bool Server::sendCmd(string cmd) {
 		}
 
 		//Callback
-		/*Callbacker cbe(EventCode::onSendCommand);
+		Callbacker cbe(EventCode::onSendCommand);
 		cbe.insert("cmd", py::str(cmd));
 		if (!cbe.callback()) {
 			return false;
-		}*/
+		}
 
 		if (!WriteFile(this->g_hChildStd_IN_Wr, cmd.c_str(),cmd.length(), &this->ReadNum, NULL))
 		{
@@ -243,9 +245,11 @@ void catchInfo(QString line) {
 	QRegExp world("worlds\\/(.+)\\/db");
 	QRegExp version("Version\\s(.+)");
 	QRegExp PID("PID\\s(.+)[?]");
+	QRegExp Join("Player\\sconnected:\\s(.+),\\sxuid:\\s(.+)");
 	int world_pos = world.indexIn(line);
 	int version_pos = version.indexIn(line);
 	int pid_pos = PID.indexIn(line);
+	int join_pos = Join.indexIn(line);
 	if (world_pos > -1) {
 		string world_string = "<font color = \"#f89b9b\">" + QString2stdString(world.cap(1)) + "</font>";
 		win->chLabel("world",world_string);
@@ -264,6 +268,9 @@ void catchInfo(QString line) {
 	}
 	else if (pid_pos > -1) {
 		win->ipipelog(u8"[CSPBot] 提示:已有一个PID为"+ QString2stdString(PID.cap(1))+u8"的相同目录进程，是否结束进程?（确认请输入y,取消请输入n)");
+	}
+	else if (join_pos > -1) {
+		bindXuid(QString2stdString(Join.cap(1)), QString2stdString(Join.cap(2)));
 	}
 }
 
@@ -284,7 +291,7 @@ void selfCatchLine(QString line) {
 
 		QRegExp r(stdString2QString(Regular));
 		int r_pos = r.indexIn(line);
-		//qDebug() << r << r_pos;
+		//qDebug() << line << r << r_pos;
 		//执行操作
 		if (r_pos > -1 && From == "console") {
 			string Action_type = Action.substr(0, 2);
@@ -304,85 +311,9 @@ void selfCatchLine(QString line) {
 				mi->sendAllGroupMsg(cmd);
 			}
 			else {
-				CustomCmd(Action);
+				string ac = FmtConsoleRegular(Action);
+				Command::CustomCmd(ac,"");
 			}
-		}
-	}
-}
-string fmtMotdBE(string msgJson, string returnMsg);
-string fmtMotdJE(string msgJson, string returnMsg);
-string motdbe(string host);
-string motdje(string host);
-bool bind(string qq, string name);
-bool unbind(string qq);
-
-void CustomCmd(string cmd,string group) {
-	vector<string> sp = split(cmd, " ");
-	string Action_Type = sp[0];
-	if (Action_Type == "bind") {
-		if (sp.size() > 2) {
-			bind(sp[1], sp[2]);
-		}
-		else {
-			mi->sendGroupMsg(group, u8"参数错误!");
-		}
-	}
-	else if (Action_Type == "unbind") {
-		if (sp.size() > 1) {
-			unbind(sp[1]);
-		}
-		else {
-			mi->sendGroupMsg(group, u8"参数错误!");
-		}
-	}
-	else if (Action_Type == "motdbe") {
-		if (sp.size() > 2) {
-			QRegExp r("(\\w.+):(\\w+)");
-			int r_pos = r.indexIn(stdString2QString(sp[1]));
-			if (r_pos > -1) {
-				string motd_respone = motdbe(sp[1]);
-				string fmt_respone;
-				fmt_respone = fmtMotdBE(motd_respone, sp[2]);
-				mi->sendGroupMsg(group, fmt_respone);
-			}
-			else {
-				mi->sendGroupMsg(group, u8"Motd地址错误!");
-			}
-		}
-		else {
-			mi->sendGroupMsg(group, u8"参数错误!");
-		}
-	}
-	else if (Action_Type == "motdje") {
-		if (sp.size() > 2) {
-			QRegExp r("(\\w.+):(\\w+)");
-			int r_pos = r.indexIn(stdString2QString(sp[1]));
-			if (r_pos > -1) {
-				string motd_respone = motdje(sp[1]);
-				string fmt_respone;
-				fmt_respone = fmtMotdJE(motd_respone, sp[2]);
-				mi->sendGroupMsg(group, fmt_respone);
-			}
-			else {
-				mi->sendGroupMsg(group, u8"Motd地址错误!");
-			}
-		}
-		else {
-			mi->sendGroupMsg(group, u8"参数错误!");
-		}
-	}
-	else if (Action_Type == "start") {
-		server = new Server();
-		server->start();
-		win->chenableForce(true);
-		win->ipipelog(u8"[CSPBot] 已向进程发出启动命令");
-	}
-	else if (Action_Type == "stop") {
-		if (server->started) {
-			server->stopServer();
-		}
-		else if (server->started != false && group != "0") {
-			mi->sendGroupMsg(group, "服务器不在运行中");
 		}
 	}
 }

@@ -233,6 +233,5 @@ string FmtGroupRegular(
 	string min_ = m_replace(hour_, "{min}", std::to_string(t->tm_min));
 	string second_ = m_replace(min_, "{second}", std::to_string(t->tm_sec));
 
-
 	return second_;
 }
