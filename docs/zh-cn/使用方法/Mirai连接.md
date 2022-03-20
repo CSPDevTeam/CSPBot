@@ -11,7 +11,7 @@ adapters:
 
 4. 启动你的Mirai
 
-<img src="./zh-cn/使用方法/项目介绍/3.PNG" alt="Mirai-Http-API输出" style="zoom:60%"/>
+<img src="./zh-cn/使用方法/项目介绍/3.png" alt="Mirai-Http-API输出" style="zoom:60%"/>
 
 5. 当出现上图的时候就代表Mirai已经配置完成了
 
@@ -25,7 +25,7 @@ adapters:
 # 配置CSPBot
 1. 打开`config/config.yml`文件
 
-<img src="./zh-cn/使用方法/项目介绍/3.PNG" alt="Mirai-Http-API输出" style="zoom:60%"/>
+<img src="./zh-cn/使用方法/项目介绍/3.png" alt="Mirai-Http-API输出" style="zoom:60%"/>
 
 2. 把`[ws adapter] is listening at ws://xxxx:xxxx`中的`ws://xxxx:xxxx`粘贴到`connectUrl`
 
