@@ -211,6 +211,25 @@ import bot
 motd = bot.motdje("127.0.0.1:25565")
 ```
 
+#### 注册一个指令
+`bot.registerCommand(cmd,function)`
+- 参数：
+
+  - cmd : `str`  
+    需要注册的指令
+
+  - function : `function`  
+    回调函数
+
+- 返回值：是否注册成功
+- 返回值类型：`bool`
+```python
+import bot
+def cmdcb(data):
+    logger.info("收到命令: "+str(data))
+bot.registerCommand("test",cmdcb)
+```
+
 
 
 
