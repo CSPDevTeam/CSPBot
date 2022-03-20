@@ -57,23 +57,35 @@ bool runcmd(const string& cmd) {
 
 //Mirai API
 void sendGroup(const string& group, const string& msg) {
-	mi->sendGroupMsg(group,msg);
+	std::unordered_map<string,string> data;
+	data.emplace("group", group);
+	data.emplace("msg", msg);
+	win->ThreadMiraiSendAPI("sendGroup", data);
 }
 
 void sendAllGroup(const string& msg) {
-	mi->sendAllGroupMsg(msg);
+	std::unordered_map<string, string> data;
+	data.emplace("msg", msg);
+	win->ThreadMiraiSendAPI("sendAllGroup", data);
 }
 
 void recallMsg(const string& target) {
-	mi->recallMsg(target);
+	std::unordered_map<string, string> data;
+	data.emplace("target", target);
+	win->ThreadMiraiSendAPI("recallMsg", data);
 }
 
 void sendApp(const string & group, const string & code){
-	mi->send_app(group, code);
+	std::unordered_map<string, string> data;
+	data.emplace("group", group);
+	data.emplace("code", code);
+	win->ThreadMiraiSendAPI("App", data);
 }
 
 void sendPacket(const string& packet) {
-	mi->SendPacket(packet);
+	std::unordered_map<string, string> data;
+	data.emplace("packet", packet);
+	win->ThreadMiraiSendAPI("sendPacket", data);
 }
 
 //设置监听器
@@ -327,6 +339,22 @@ py::list getAllAPIList() {
 	return apilist;
 }
 
+bool registerCommand(const string& cmd, py::function cbf) {
+	if (command.find(cmd) != command.end()&&
+		cmd != "bind" &&
+		cmd != "unbind" &&
+		cmd != "motdbe" &&
+		cmd != "motdje" &&
+		cmd != "start" &&
+		cmd != "stop"
+		) {
+		return false;
+		throw py::value_error("Invalid command:" + cmd);
+	}
+	command.emplace(cmd, cbf);
+	return true;
+}
+
 PYBIND11_EMBEDDED_MODULE(bot, m) {
 	using py::literals::operator""_a;
 #pragma region Logger
@@ -351,7 +379,8 @@ PYBIND11_EMBEDDED_MODULE(bot, m) {
 		.def("motdbe", &pymotdbe)
 		.def("motdje", &pymotdje)
 		.def("tip", &ShowTipWindow)
-		.def("getAllAPIList",&getAllAPIList);
+		.def("getAllAPIList",&getAllAPIList)
+		.def("registerCommand", &registerCommand);
 		;
 #pragma endregion
 }

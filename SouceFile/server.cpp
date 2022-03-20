@@ -167,11 +167,9 @@ bool Server::sendCmd(string cmd) {
 		}
 
 		//Callback
-		Callbacker cbe(EventCode::onSendCommand);
-		cbe.insert("cmd", py::str(cmd));
-		if (!cbe.callback()) {
-			return false;
-		}
+		std::unordered_map<string, string> p;
+		p.emplace("cmd", cmd);
+		win->OtherCallback("onSendCommand", p);
 
 		if (!WriteFile(this->g_hChildStd_IN_Wr, cmd.c_str(),cmd.length(), &this->ReadNum, NULL))
 		{

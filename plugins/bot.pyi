@@ -1,3 +1,6 @@
+from ast import Str
+
+
 class Logger:
     def info(msg:str):
         """输出INFO信息"""
@@ -66,7 +69,7 @@ def sendPacket(packet:str):
     """
     ...
 
-def setListener(event: str, function: Callable[[Any], Optional[bool]]):
+def setListener(event: str, function: callable[[dict], None]) -> bool:
     """
     设置监听器
 
@@ -75,7 +78,24 @@ def setListener(event: str, function: Callable[[Any], Optional[bool]]):
     """
     ...
 
-def motdbe(ip_port:str) -> dict:
+def getAllAPIList()->list[str]:
+    """
+    获取所有API列表
+    """
+    ...
+
+def tip(type:str,title:str,content:str,options:list[str]) -> str:
+    """
+    提示框
+    
+    :param type: 提示类型
+    :param title: 提示标题
+    :param content: 提示内容
+    :param options: 窗口按钮
+    """
+    ...
+
+def motdbe(ip_port:str) -> str:
     """
     获取BE的Motd信息
     
@@ -83,5 +103,10 @@ def motdbe(ip_port:str) -> dict:
     """
     ...
 
-def motdje(ip_port:str) -> dict:
+def motdje(ip_port:str) -> str:
+    """
+    获取JE的Motd信息
+    
+    :param ip_port: 地址及端口 例:127.0.0.1:25565
+    """
     ...

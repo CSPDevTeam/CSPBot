@@ -168,9 +168,9 @@ void onText(WebSocketClient& client, string msg) {
 				args.emplace("msg", msg);
 				args.emplace("qq", qq);
 				args.emplace("qqnick", qqnick);
-				if (win->OtherCallback("onReceiveMsg", args)) {
-					selfGroupCatchLine(stdString2QString(msg), group, qq,qqnick);
-				}
+				win->OtherCallback("onReceiveMsg", args);
+				selfGroupCatchLine(stdString2QString(msg), group, qq,qqnick);
+				
 			}
 		}
 		//事件处理(群成员改名)
@@ -294,38 +294,36 @@ void Mirai::botProfile() {
 	this->ws->send(mj);
 }
 
-void Mirai::sendGroupMsg(string group, string msg) {
+void Mirai::sendGroupMsg(string group, string msg,bool callback) {
 	if (this->logined) {
 		string mj = "{\"syncId\": 2, \"command\":\"sendGroupMessage\", \"subCommand\" : null,\
 					\"content\": {\"target\":" + group + ", \"messageChain\": [{ \"type\":\"Plain\", \"text\" : \"" + msg + "\"}]}}";
 		std::unordered_map<string, string> args;
 		args.emplace("group", group);
 		args.emplace("msg", msg);
-		if (win->OtherCallback("onSendMsg", args)) {
-			this->ws->send(mj);
-		}
+		win->OtherCallback("onSendMsg", args);
+		this->ws->send(mj);
 	}
 
 }
 
-void Mirai::recallMsg(string target) {
+void Mirai::recallMsg(string target, bool callback) {
 	//recall
 	if (this->logined) {
 		string mj = "{\"syncId\": 3,\"command\" : \"recall\",\"subCommand\":null,\"content\":{\"target\":" + target + "}}";
 		std::unordered_map<string, string> args;
 		args.emplace("target", target);
-		if (win->OtherCallback("onRecall", args)) {
-			this->ws->send(mj);
-		}
+		win->OtherCallback("onRecall", args);
+		this->ws->send(mj);
 	}
 }
 
-void Mirai::sendAllGroupMsg(string msg) {
+void Mirai::sendAllGroupMsg(string msg, bool callback) {
 	YAML::Node config = YAML::LoadFile("config/config.yml")["group"];
 	for (auto igroup : config) {
 		string group = std::to_string(igroup.as<long long>());
 		if (this->logined) {
-			this->sendGroupMsg(group, msg);
+			this->sendGroupMsg(group, msg,callback);
 		}
 	}
 

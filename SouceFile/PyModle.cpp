@@ -10,7 +10,14 @@
 using namespace std;
 namespace fs = filesystem;
 
-bool PluginManager::registerPlugin(py::module handler, std::string name, std::string info) {
+bool PluginManager::registerPlugin(
+    py::module handler,
+    std::string name, 
+    std::string info,
+    std::string autor,
+    std::string version) {
+
+    string SelfName = name, SelfInfo = info, SelfAutor = autor, SelfVersion = version;
 
     //检测插件是否已被注册
     if (handler != nullptr)             // DLL Plugin
@@ -26,7 +33,21 @@ bool PluginManager::registerPlugin(py::module handler, std::string name, std::st
         }
     }
 
-    Plugin plugin{ name,info };
+    //从函数获取
+    try {
+        py::dict data = handler.attr("Register")();
+        SelfName = py::str(data["name"]);
+        SelfInfo = py::str(data["info"]);
+        SelfAutor = py::str(data["Author"]);
+        SelfVersion = py::str(data["Version"]);
+    }
+    catch (...) {
+
+    }
+     
+   
+
+    Plugin plugin{SelfName,SelfInfo,SelfAutor,SelfVersion};
     plugin.m = handler;
     plugins.emplace(name, plugin);
     return true;
@@ -65,7 +86,9 @@ bool PluginManager::LoadPlugin() {
         sys.attr("path").attr("append")(PLUGIN_PATH);
         sys.attr("path").attr("append")(PYLIBRARY_PATH);
 
+
         for (auto& info : fs::directory_iterator(PLUGIN_PATH)) {
+            string filename = info.path().filename().u8string();
             if (info.path().extension() == ".py"||
                 info.path().extension() == ".pyc"||
                 info.path().extension() == ".pyd") {
@@ -82,7 +105,7 @@ bool PluginManager::LoadPlugin() {
                     if (m)
                     {
                         if (getPlugin(m) == nullptr)
-                            registerPlugin(m, name, name);
+                            registerPlugin(m,name, name);
                     }
                     else
                     {

@@ -39,6 +39,7 @@ bool connectMirai();
 vector<string> split(const string& str, const string& pattern);
 string motdbe(string host);
 string motdje(string host);
+void getCpuUsePercentage1(int& nMemTotal);
 string FmtConsoleRegular(string cmd);
 void InitPython();
 

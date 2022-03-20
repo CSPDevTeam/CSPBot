@@ -18,12 +18,14 @@ inline Logger pluginLogger("PluginModle");
 struct Plugin {
 	std::string name;
 	std::string info;
+	std::string author;
+	std::string version;
 	py::module m;
 };
 
 class PluginManager {
 public:
-	static bool registerPlugin(py::module handle,std::string name,std::string info);
+	static bool registerPlugin(py::module handle,std::string name, std::string info = "", std::string autor = "Unkown", std::string version = "v1.0.0");
 	static Plugin* getPlugin(std::string name);
 	static Plugin* getPlugin(py::module handler);
 	static bool hasPlugin(std::string name);
@@ -36,19 +38,20 @@ enum EventCode
 {
 	onServerStart, //OK
 	onServerStop, //OK 
-	onSendCommand, //OK intercept
-	onReceiveMsg, //OK intercept
+	onSendCommand, //OK
+	onReceiveMsg, //OK
 	onReceivePacket, //OK
 	onStop, //OK
 	onLogin, //OK
 	onImport, //OK
-	onSendMsg, //OK intercept
-	onRecall, //OK intercept
+	onSendMsg, //OK
+	onRecall, //OK
 	onConnectError, //OK
 	onConnectLost, //OK
 };
 
 inline std::unordered_map<EventCode, vector<py::function>> g_cb_functions;
+inline std::unordered_map<string, py::function> command;
 inline std::unordered_map<std::string, Plugin> plugins;
 inline std::unordered_map<EventCode, bool> enableEvent;
 
@@ -89,4 +92,6 @@ private:
 	py::dict arg_;
 	py::gil_scoped_acquire gil_;
 };
+
+
 

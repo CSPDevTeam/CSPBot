@@ -8,6 +8,7 @@
 #include "server.h"
 #include "cspbot.h"
 #include "mirai.h"
+#include "CPython.h"
 
 using namespace std;
 
@@ -135,5 +136,17 @@ void Command::CustomCmd(string cmd, string group) {
 		else if (server->started != false && group != "0") {
 			mi->sendGroupMsg(group, "服务器不在运行中");
 		}
+	}
+	else if (command.find(Action_Type) != command.end()) {
+		qDebug() << stdString2QString(Action_Type);
+		vector<string> args;
+		int num=0;
+		for (auto& i : sp) {
+			if(num != 0){
+				args.push_back(i);
+			}
+			num++;
+		}
+		win->CommandCallback(Action_Type, args);
 	}
 }

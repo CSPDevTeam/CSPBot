@@ -2,6 +2,9 @@
 ![DownLoad](https://img.shields.io/github/downloads/HuoHuas001/CSPBot/latest/total?style=for-the-badge) ![License](https://img.shields.io/github/license/HuoHuas001/CSPBot?style=for-the-badge) ![Version](https://img.shields.io/github/v/release/HuoHuas001/CSPBot?style=for-the-badge) ![Star](https://img.shields.io/github/stars/HuoHuas001/CSPBot?style=for-the-badge)
 # CSPBot
 
+## 文档
+- ### [CSPBot 文档站](https://huohuas001.github.io/CSPBot)
+
 ### 简介:
 - `使用CPP编写的一款易用性高，扩展性强的机器人`
 
@@ -39,6 +42,7 @@
 <details>
 <summary>展开查看</summary>
 2022-3-16(Release v0.0.2)：重新添加了一些监听器
+
 2022-3-18(Release v0.0.3)：添加了弹窗API，并添加了占位符
 </details>
 

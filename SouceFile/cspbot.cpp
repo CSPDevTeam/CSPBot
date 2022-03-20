@@ -10,6 +10,7 @@
 #include "qmap.h"
 #include <QNetworkRequest>
 #include <QNetworkReply>
+#include "mirai.h"
 #include <QNetworkAccessManager>
 
 using namespace std;
@@ -157,6 +158,46 @@ bool CSPBot::slotOtherCallback(QString cbe, const StringMap& qm) {
     return cb.callback();
 }
 
+void CSPBot::slotCommandCallback(QString cbe, const StringVerctor& qm) {
+    string type = QString2stdString(cbe);
+    if (command.find(type) != command.end()) {
+        py::list args;
+        for (auto &i : qm) {
+            args.append(py::str(i));
+        }
+        py::function cbe = command[type];
+        cbe(args);
+    }
+}
+
+bool CSPBot::slotThreadMirai(QString cbe, const StringMap& qm) {
+    string type = QString2stdString(cbe);
+    if (type == "sendGroup") {
+        string group = QString2stdString(qm.value("group"));
+        string msg = QString2stdString(qm.value("msg"));
+        mi->sendGroupMsg(group, msg,false);
+    }
+    else if (type == "sendAllGroup") {
+        string msg = QString2stdString(qm.value("msg"));
+        mi->sendAllGroupMsg(msg,false);
+    }
+    else if (type == "recallMsg") {
+        string target = QString2stdString(qm.value("target"));
+        mi->recallMsg(target,false);
+    }
+    else if (type == "App") {
+        string group = QString2stdString(qm.value("group"));
+        string code = QString2stdString(qm.value("code"));
+        mi->send_app(group, code);
+    }
+    else if (type == "sendPacket") {
+        string code = QString2stdString(qm.value("packet"));
+        mi->SendPacket(code);
+     }
+    return true;
+}
+
+
 CSPBot::CSPBot(QWidget *parent)
     : QMainWindow(parent)
 {
@@ -219,18 +260,30 @@ CSPBot::CSPBot(QWidget *parent)
     connect(this, SIGNAL(chstatus(bool)), this, SLOT(changestatus(bool)));
     connect(this, SIGNAL(enableForce(bool)), this, SLOT(changeenableForce(bool)));
     connect(this, SIGNAL(updateText(QString, QString)), this, SLOT(upText(QString, QString)));
-    connect(this, SIGNAL(signal_ThreadCallback(int)), this, SLOT(slotCallback(int)));
     connect(this, SIGNAL(signal_PacketCallback(QString)), this, SLOT(slotPacketCallback(QString)));
 
     //注册并绑定
     qRegisterMetaType<StringMap>("StringMap");
+    qRegisterMetaType<StringVerctor>("StringVerctor");
     connect(
         this, 
         SIGNAL(signal_OtherCallback(QString, const StringMap&)), 
         this, 
-        SLOT(slotOtherCallback(QString, const StringMap&)),
-        Qt::BlockingQueuedConnection
+        SLOT(slotOtherCallback(QString, const StringMap&))
     );
+    connect(
+        this,
+        SIGNAL(signal_ThreadMirai(QString, const StringMap&)),
+        this,
+        SLOT(slotThreadMirai(QString, const StringMap&))
+    );
+    connect(
+        this,
+        SIGNAL(signal_CommandCallback(QString, const StringVerctor&)),
+        this,
+        SLOT(slotCommandCallback(QString, const StringVerctor&))
+    );
+
     
 }
 
@@ -304,8 +357,8 @@ void CSPBot::InitTable() {
     InitPlayerTableView(ui.playerView, playerhead, 3);
     string regularhead[4] = { u8"正则",u8"来源",u8"执行",u8"权限" };
     InitRegularTableView(ui.reView, regularhead, 4);
-    string pluginhead[3] = { u8"插件",u8"介绍",u8"版本"};
-    InitPluginTableView(ui.pluginView, pluginhead,3);
+    string pluginhead[5] = {u8"文件名",u8"插件",u8"介绍",u8"版本",u8"作者"};
+    InitPluginTableView(ui.pluginView, pluginhead,5);
 }
 
 void CSPBot::setAllScrollbar(QScrollBar* bar) {
@@ -590,11 +643,23 @@ void CSPBot::InitPluginTableView(QTableView* t, string head[], int head_length)
     for (auto &i: plugins)
     {
         QStandardItem* item1 = new QStandardItem(stdString2QString(i.first));
+        QStandardItem* item2 = new QStandardItem(stdString2QString(i.second.name));
+        QStandardItem* item3 = new QStandardItem(stdString2QString(i.second.info));
+        QStandardItem* item4 = new QStandardItem(stdString2QString(i.second.version));
+        QStandardItem* item5 = new QStandardItem(stdString2QString(i.second.author));
+
+        //居中文本
         item1->setTextAlignment(Qt::AlignCenter);
-        QStandardItem* item2 = new QStandardItem(stdString2QString(i.second.info));
         item2->setTextAlignment(Qt::AlignCenter);
+        item3->setTextAlignment(Qt::AlignCenter);
+        item4->setTextAlignment(Qt::AlignCenter);
+        item5->setTextAlignment(Qt::AlignCenter);
+
         m_model->setItem(in, 0, item1);
         m_model->setItem(in, 1, item2);
+        m_model->setItem(in, 2, item3);
+        m_model->setItem(in, 3, item4);
+        m_model->setItem(in, 4, item5);
         in++;
     }
     

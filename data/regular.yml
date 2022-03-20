@@ -39,7 +39,7 @@
   Permissions: false
 
 - Regular: ^bind\s(.+)
-  Action: 'bind {qqid} "$1"'
+  Action: 'bind {qqid} $1'
   From: group
   Permissions: false
 
@@ -51,4 +51,9 @@
 - Regular: connected:\s(.+),\sxuid:\s(.+)
   Action: '>>玩家$1进入了服务器'
   From: console
+  Permissions: false
+
+- Regular: test\s(.+)
+  Action: 'test $1'
+  From: group
   Permissions: false

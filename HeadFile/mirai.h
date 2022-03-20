@@ -31,9 +31,9 @@ class Mirai {
 public:
 	explicit Mirai();
 	bool login();
-	void sendGroupMsg(string group, string msg);
-	void sendAllGroupMsg(string msg);
-	void recallMsg(string target);
+	void sendGroupMsg(string group, string msg, bool callback = true);
+	void sendAllGroupMsg(string msg, bool callback = true);
+	void recallMsg(string target, bool callback=true);
 	void botProfile();
 	void changeName(string qq, string group, string name);
 	void send_app(string group, string code);

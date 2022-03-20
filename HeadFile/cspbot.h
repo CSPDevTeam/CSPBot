@@ -23,6 +23,7 @@ class CSPBot : public QMainWindow
 public:
     //注册线程类型
     typedef QMap<QString, QString> StringMap;
+    typedef vector<std::string> StringVerctor;
 
     CSPBot(QWidget *parent = Q_NULLPTR);
     bool serverStarted = false;
@@ -80,16 +81,36 @@ public:
         }
 
         //Callback
-        return emit signal_OtherCallback(cbeCode, qm);
+        bool ret = emit signal_OtherCallback(cbeCode, qm);
+        qDebug() << "Listen:" << cbeCode << "return:" << ret;
+        return ret;
     }
+
+    inline void CommandCallback(string cb, vector<std::string> args) {
+        QString cbeCode = stdString2QString(cb);
+        emit signal_CommandCallback(cbeCode, args);
+    }
+
 
     //表格自动写入
     void InitPlayerTableView(QTableView* t, string head[], int head_length);
     void InitRegularTableView(QTableView* t, string head[], int head_length);
     void InitPluginTableView(QTableView* t, string head[], int head_length);
 
-    //HTTP请求
-    void onSendHttpsRequest();
+    //PluginSendMessageAPI
+    inline void ThreadMiraiSendAPI(string type, std::unordered_map<string, string> args = {}){
+        QMap<QString, QString> qm;
+        QString cbeCode = stdString2QString(type);
+        //传参
+        for (auto& i : args) {
+            QString key = stdString2QString(i.first);
+            QString value = stdString2QString(i.second);
+            qm.insert(key, value);
+        }
+
+        //Callback
+        emit signal_ThreadMirai(cbeCode, qm);
+    }
     
 //Signals信号
 signals:
@@ -100,7 +121,8 @@ signals:
     void updateText(QString name, QString text);
     void signal_PacketCallback(QString dict);
     bool signal_OtherCallback(QString cbe, const StringMap& qm);
-
+    void signal_ThreadMirai(QString cbe, const StringMap& qm);
+    void signal_CommandCallback(QString cbe, const StringVerctor& qm);
 //Slot函数
 private slots:
     void on_actionMinimize_triggered();//最小化窗口
@@ -119,7 +141,8 @@ private slots:
     void ReloadPlugin();
     void slotPacketCallback(QString dict);
     bool slotOtherCallback(QString cbe, const StringMap& qm);
-
+    bool slotThreadMirai(QString cbe, const StringMap& qm);
+    void slotCommandCallback(QString cbe, const StringVerctor& qm);
 //自有函数
 private:
     Ui::CSPBotClass ui;
