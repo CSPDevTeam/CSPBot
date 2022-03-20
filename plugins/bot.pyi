@@ -71,12 +71,22 @@ def sendPacket(packet:str):
 
 def setListener(event: str, function: callable[[dict], None]) -> bool:
     """
-    设置监听器
+    设置监听器(监听器可前往:https://huohuas001.github.io/CSPBot/#/zh-cn/开发文档/API文档 查看)
 
     :param event: 监听器名称
     :param function: 回调函数
     """
     ...
+
+def registerCommand(cmd: str, function: callable[[list[str]], None]) -> bool:
+    """
+    注册指令（可以免去正则前的<<）
+
+    :param cmd: 监听器名称
+    :param function: 回调函数
+    """
+    ...
+
 
 def getAllAPIList()->list[str]:
     """
