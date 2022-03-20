@@ -171,7 +171,7 @@ api = bot.getAllAPIList()
     窗口内容
 
   - options : `list`  
-    按钮枚举数组 见[]()
+    按钮枚举数组 见[按钮枚举值](zh-cn/开发文档/按钮枚举.md)
 	
 
 - 返回值：按钮枚举值
