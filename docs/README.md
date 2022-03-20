@@ -1,2 +1,2 @@
-# MJ_mall_doc
-MJ Mall 相关文档 
+# CSPBot 使用文档
+
