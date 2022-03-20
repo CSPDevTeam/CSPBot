@@ -1,4 +1,0 @@
-// 提示文件帮助 Visual Studio IDE 解释 Visual C++ 标识符,
-// 如函数和宏的名称。
-// 有关详细信息，请参见 https://go.microsoft.com/fwlink/?linkid=865984
-#define PYBIND11_MODULE(name, variable) static ::pybind11::module_::module_def PYBIND11_CONCAT(pybind11_module_def_, name) PYBIND11_MAYBE_UNUSED; PYBIND11_MAYBE_UNUSED static void PYBIND11_CONCAT(pybind11_init_, name)(::pybind11::module_ &); PYBIND11_PLUGIN_IMPL(name) { PYBIND11_CHECK_PYTHON_VERSION PYBIND11_ENSURE_INTERNALS_READY auto m = ::pybind11::module_::create_extension_module( PYBIND11_TOSTRING(name), nullptr, &PYBIND11_CONCAT(pybind11_module_def_, name)); try { PYBIND11_CONCAT(pybind11_init_, name)(m); return m.ptr(); } PYBIND11_CATCH_INIT_EXCEPTIONS } void PYBIND11_CONCAT(pybind11_init_, name)(::pybind11::module_ & (variable))
