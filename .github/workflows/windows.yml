@@ -102,6 +102,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
+          name: CSPBot Release ${{env.RELEASE_TAG}}
           body_path: ./CHANGELOG.md
           files: |
             D:/out/CSPBot.zip
