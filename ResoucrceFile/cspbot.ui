@@ -544,7 +544,7 @@ border-radius: 10px;
 background-color:rgba(238, 240, 246,90);</string>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="console_2">
       <property name="styleSheet">

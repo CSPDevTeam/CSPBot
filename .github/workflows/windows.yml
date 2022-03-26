@@ -28,7 +28,7 @@ jobs:
             
 
     env:
-      targetName: CSPBot.exe
+      targetName: CSPBot
     # 步骤
     steps:
       # 安装Qt
@@ -89,7 +89,7 @@ jobs:
       - name: Upload plugins
         uses: actions/upload-artifact@v1.0.0
         with:
-          name: plugins
+          name: CSPBot
           path: D:/out/BuildConfig
 
       - name: Compress to zip
@@ -102,7 +102,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          body_path: ./CHANGELOG.txt
+          body_path: ./CHANGELOG.md
           files: |
             D:/out/CSPBot.zip
         env:
