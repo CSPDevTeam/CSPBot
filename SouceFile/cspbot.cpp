@@ -36,9 +36,10 @@ void CSPBot::insertPipeLog(QString a) {
     try {
         ui.log->setReadOnly(false);
         ui.log->append(a);
+        ui.log->moveCursor(QTextCursor::End);
         ui.log->setReadOnly(true);
     }
-    catch (const char e) {
+    catch (...) {
 
     }
 }

@@ -544,7 +544,7 @@ border-radius: 10px;
 background-color:rgba(238, 240, 246,90);</string>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="console_2">
       <property name="styleSheet">
@@ -561,15 +561,19 @@ background-color:rgba(238, 240, 246,90);</string>
        </property>
        <property name="font">
         <font>
-         <family>Microsoft YaHei</family>
+         <family>Cascadia Mono</family>
+         <pointsize>10</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
         </font>
        </property>
        <property name="styleSheet">
         <string notr="true">
 
 QTextEdit{
-background-color:rgba(117, 189, 225,80);
-border-radius:15px
+background-color:rgba(0,0,0,80);
+border-radius:15px;
+color:white;
 }
 </string>
        </property>

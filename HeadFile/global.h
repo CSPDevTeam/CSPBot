@@ -9,3 +9,4 @@ class Mirai;
 extern Mirai* mi;
 
 extern std::string Version;
+extern int configVersion;

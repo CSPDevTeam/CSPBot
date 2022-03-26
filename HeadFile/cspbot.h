@@ -160,4 +160,6 @@ private:
     void closeEvent(QCloseEvent* event);
     QPoint mousePosition;
     bool isMousePressed;
+
+    int startCount = 0;
 };

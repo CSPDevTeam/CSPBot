@@ -23,6 +23,7 @@ using namespace std;
 CSPBot* win;
 Server* server = new Server();
 std::string Version = "v0.0.3";
+int configVersion = 2;
 
 string getConfig(string key) {
     try {
@@ -45,6 +46,11 @@ void InitPython();
 
 Logger logger("main");
 
+bool queryConfigVersion(){
+    int config = YAML::LoadFile("config/config.yml")["Version"].as<int>();
+    return config == configVersion;
+}
+
 
 int main(int argc, char *argv[])
 {
@@ -55,6 +61,19 @@ int main(int argc, char *argv[])
 
     CSPBot* w = new CSPBot;
     win = w;
+
+    if (!queryConfigVersion()) {
+        auto temp = QMessageBox::critical(
+            w,
+            u8"严重错误",
+            u8"配置文件版本不匹配,请检查是否为最新版",
+            QMessageBox::Ok
+        );
+        if (temp == QMessageBox::Ok) {
+            return 1;
+        }
+    }
+
     //连接ws
     w->show();
 

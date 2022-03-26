@@ -26,11 +26,8 @@ public:
 	bool stopServer();
 	bool sendCmd(string cmd);
 	bool getPoll();
-	//void selfCatchLine(QString line);
-
-
 	BOOL bRet;
-	char ReadBuff[4096];
+	char ReadBuff[8192];
 	DWORD ReadNum=0;
 	PROCESS_INFORMATION pi;
 	HANDLE g_hChildStd_IN_Rd = NULL;

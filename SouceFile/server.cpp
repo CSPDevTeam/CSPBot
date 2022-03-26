@@ -108,26 +108,47 @@ bool Server::createServer()
 	return true;
 }
 
+QString getColoredLine(string line);
+bool is_str_utf8(const char* str);
+string GbkToUtf8(const char* src_str);
+string Utf8ToGbk(const char* src_str);
+
 void Server::run() {
 	createServer();
 	ServerPoll* sp = new ServerPoll();
 	sp->start();
 	if (started) {
 		win->OtherCallback("onServerStart");
-		while (ReadFile(this->g_hChildStd_OUT_Rd, this->ReadBuff, 4096, &this->ReadNum, NULL))
+		while (ReadFile(this->g_hChildStd_OUT_Rd, this->ReadBuff, 8192, &this->ReadNum, NULL))
 		{
 			if (started) {
 				ReadBuff[ReadNum] = '\0';
 				std::string line = ReadBuff;
+				if (!is_str_utf8(line.c_str())) {
+					line = GbkToUtf8(line.c_str());
+				}
+				qDebug() << stdString2QString(line);
 				regex pattern("\033\\[(.+?)m");
-				line = regex_replace(line, pattern, "");
+				string nocolor_line = regex_replace(line, pattern, "");
 				vector<string> words = split(line, "\n");
+				vector<string> nocolor_words = split(nocolor_line, "\n");
 				for (string i : words) {
 					string _line = m_replace(i, "\n", "");
 					_line = m_replace(_line, "\r", "");
 					if (_line != "") {
 						QString qline = stdString2QString(_line);
-						win->ipipelog(_line);
+						QString coloredLine = getColoredLine(_line);
+						if (coloredLine != "") {
+							win->ipipelog(QString2stdString(coloredLine));
+						}
+					}
+				}
+
+				for (string i : nocolor_words) {
+					string _line = m_replace(i, "\n", "");
+					_line = m_replace(_line, "\r", "");
+					if (_line != "") {
+						QString qline = stdString2QString(_line);
 						catchInfo(qline);
 						selfCatchLine(qline);
 					}
