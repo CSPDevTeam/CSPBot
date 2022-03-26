@@ -51,7 +51,7 @@
     <!-- Placeholder for properties written by VS Property Manager -->
   </PropertyGroup>
   <PropertyGroup>
-   <DefaultQtVersion>D:\Qt\Qt5.14.2\5.14.2\msvc2017_64</DefaultQtVersion>
+   <DefaultQtVersion>D:\Qt\Qt5.14.2\Qt\5.14.2\msvc2017_64\</DefaultQtVersion>
    <QtToolsPath>$(DefaultQtVersion)\bin</QtToolsPath>
   </PropertyGroup>
   <ItemDefinitionGroup>

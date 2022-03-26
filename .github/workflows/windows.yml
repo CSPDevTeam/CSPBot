@@ -58,7 +58,7 @@ jobs:
         id: addpath
         shell: powershell
         run: |
-          Get-ChildItem D:\Qt\Qt5.14.2\5.14.2\msvc2017_64\bin
+          Get-ChildItem D:\Qt\Qt5.14.2\Qt\5.14.2\msvc2017_64\
 
       # msvc编译
       - name: msvc-build
@@ -66,8 +66,8 @@ jobs:
         shell: cmd
         run: |
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.msvc_arch }}
-          set DefaultQtVersion=D:\Qt\Qt5.14.2\5.14.2\msvc2017_64\bin
-          set QTDIR=D:\Qt\Qt5.14.2\5.14.2\msvc2017_64\bin
+          set DefaultQtVersion=D:\Qt\Qt5.14.2\Qt\5.14.2\msvc2017_64\bin
+          set QTDIR=D:\Qt\Qt5.14.2\Qt\5.14.2\msvc2017_64\bin
           MSBuild.exe ./CSPBot.sln -property:Configuration=Release
           echo winSdkDir=%WindowsSdkDir% >> %GITHUB_ENV%
           echo winSdkVer=%WindowsSdkVersion% >> %GITHUB_ENV%
