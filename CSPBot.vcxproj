@@ -77,7 +77,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)include\libs\debug</AdditionalLibraryDirectories>
-      <AdditionalDependencies>yaml-cpp.lib;LightWSClient.lib;libcron.lib;python38.lib;fmtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)include\libs\debug\yaml-cpp.lib;$(SolutionDir)include\libs\debug\LightWSClient.lib;$(SolutionDir)include\libs\debug\libcron.lib;$(SolutionDir)include\libs\debug\python38.lib;$(SolutionDir)include\libs\debug\fmtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ClCompile>
       <LanguageStandard>stdcpp17</LanguageStandard>

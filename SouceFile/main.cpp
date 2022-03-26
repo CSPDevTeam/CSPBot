@@ -14,6 +14,8 @@
 #pragma warning(disable: 4275)
 #pragma warning(disable: 4005)
 
+//添加lib文件
+
 #if _MSC_VER >= 1600
 #pragma execution_character_set("utf-8")
 #endif

@@ -108,7 +108,7 @@ void getCpuUsePercentage1(int& nMemTotal){
 	DWORD dwValue;
 	PdhGetFormattedCounterValue(counter, PDH_FMT_DOUBLE, &dwValue, &pdhValue);
 	nMemTotal = pdhValue.doubleValue;
-	qDebug() << "CPU占用:" << nMemTotal;
+	qDebug() << u8"CPU占用:" << nMemTotal;
 	PdhCloseQuery(query);
 }
 
