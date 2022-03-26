@@ -80,7 +80,7 @@ jobs:
       - name: Copy Out Files
         working-directory: ${{env.GITHUB_WORKSPACE}}
         run: |
-          cp BuildConfig/** D:/out/BuildConfig
+          cp -r BuildConfig/** D:/out/BuildConfig
           cp x64/Release/*.exe D:/out/BuildConfig
           cp config/*.yml D:/out/BuildConfig/config
           cp data/*.yml D:/out/BuildConfig/config
