@@ -58,7 +58,7 @@ jobs:
         id: addpath
         shell: powershell
         run: |
-          Get-ChildItem D:\Qt\Qt5.14.2\
+          Get-ChildItem D:\Qt\Qt5.14.2\5.14.2\msvc2017_64\bin
 
       # msvc编译
       - name: msvc-build
