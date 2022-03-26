@@ -69,35 +69,41 @@ jobs:
           set DefaultQtVersion=D:\Qt\Qt5.14.2\Qt\5.14.2\msvc2017_64\bin
           set QTDIR=D:\Qt\Qt5.14.2\Qt\5.14.2\msvc2017_64\bin
           MSBuild.exe ./CSPBot.sln -property:Configuration=Release
-          echo winSdkDir=%WindowsSdkDir% >> %GITHUB_ENV%
-          echo winSdkVer=%WindowsSdkVersion% >> %GITHUB_ENV%
-          echo vcToolsInstallDir=%VCToolsInstallDir% >> %GITHUB_ENV%
-          echo vcToolsRedistDir=%VCToolsRedistDir% >> %GITHUB_ENV%
-      # 打包 
-      - name: package
-        id: package      
-        env:
-          archiveName: ${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}
-          msvcArch: ${{ matrix.msvc_arch }}          
-        shell: pwsh
-        run: |
-          & scripts\windows-publish.ps1 ${env:archiveName} ${env:targetName}
-          # 记录packageName给后续step
-           $name = ${env:archiveName}
-           echo "::set-output name=packageName::$name"       
-      # tag 查询github-Release
-      # 上传artifacts          
-      - uses: actions/upload-artifact@v2
-        with:
-          name: ${{ steps.package.outputs.packageName }}
-          path: ${{ steps.package.outputs.packageName }}
-      # tag 上传Release
-      - name: uploadRelease
-        if: startsWith(github.event.ref, 'refs/tags/')
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${{ steps.package.outputs.packageName }}.zip
-          asset_name: ${{ steps.package.outputs.packageName }}.zip
-          tag: ${{ github.ref }}
-          overwrite: true 
+
+      - name: MkDirs
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: |
+        mkdir BuildConfig/config
+        mkdir BuildConfig/data
+    
+    - name: Copy Out Files
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: |
+        cp x64/Release/*.exe BuildConfig
+        cp config/*.yml BuildConfig/config
+        cp data/*.yml BuildConfig/config
+      shell: bash
+
+    - name: Upload plugins
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: plugins
+        path: BuildConfig
+
+    - name: Compress to zip
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      if: startsWith(github.ref, 'refs/tags/')
+      run: |
+        7z a CSPBot.zip BuildConfig
+      shell: bash
+
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        body_path: ./CHANGELOG.txt
+        files: |
+          CSPBot.zip.zip
+      env:
+          GITHUB_REPOSITORY: HuoHuas001/CSPBot
