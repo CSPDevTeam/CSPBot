@@ -1,0 +1,233 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+/****************************************************************************
+**
+** Copyright (C) 2018 The Qt Company Ltd.
+** Contact: https://www.qt.io/licensing/
+**
+** This file is part of the Qt VS Tools.
+**
+** $QT_BEGIN_LICENSE:GPL-EXCEPT$
+** Commercial License Usage
+** Licensees holding valid commercial Qt licenses may use this file in
+** accordance with the commercial license agreement provided with the
+** Software or, alternatively, in accordance with the terms contained in
+** a written agreement between you and The Qt Company. For licensing terms
+** and conditions see https://www.qt.io/terms-conditions. For further
+** information use the contact form at https://www.qt.io/contact-us.
+**
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3 as published by the Free Software
+** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
+** included in the packaging of this file. Please review the following
+** information to ensure the GNU General Public License requirements will
+** be met: https://www.gnu.org/licenses/gpl-3.0.html.
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+-->
+
+<!--
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// Evaluation of Qt properties
+//
+// Preceding evaluation chain:
+//  * Project global properties, incl. $(Keyword), $(WindowsTargetPlatformVersion), $(QtMsBuild)
+//  * Microsoft.Cpp.Default.props
+//  * Configuration properties, incl. $(ConfigurationType), $(PlatformToolset)
+//  * qt_defaults.props
+//  * Qt build settings, incl. $(QtInstall), $(QtModules)
+//  * Property sheets preceding Qt.props
+//
+// -->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <QtPrivateLoaded>true</QtPrivateLoaded>
+  </PropertyGroup>
+
+  <!--
+  /////////////////////////////////////////////////////////////////////////////////////////////////
+  // Fail-safe import of default values
+  // -->
+  <Import
+    Condition="'$(QtDefaultsLoaded)' != 'true'"
+    Project="$(MSBuildThisFileDirectory)\qt_defaults.props"/>
+
+  <!--
+  /////////////////////////////////////////////////////////////////////////////////////////////////
+  // Setup Qt installation path
+  // -->
+  <PropertyGroup Condition="'$(QtVsProjectSettings)' == 'true'">
+    <QtInstallDir Condition="Exists('$(QtInstall)')">$(QtInstall)</QtInstallDir>
+    <QtInstallRegKey Condition="'$(QtInstall)' != ''"
+      >$(QtVersionsRegKey)\$(QtInstall)</QtInstallRegKey>
+    <QtInstallRegDir Condition="'$(QtInstallDir)' == '' AND '$(QtInstallRegKey)' != ''"
+      >$([MSBuild]::GetRegistryValue('$(QtInstallRegKey)','InstallDir'))</QtInstallRegDir>
+    <QtInstallDir
+      Condition="'$(ApplicationType)' != 'Linux' AND '$(QtInstallDir)' == ''
+      AND Exists('$(QtInstallRegDir)')"
+      >$(QtInstallRegDir)</QtInstallDir>
+    <QtInstallDir
+      Condition="'$(ApplicationType)' == 'Linux' AND '$(QtInstallDir)' == ''
+      AND ( $(QtInstallRegDir.StartsWith('SSH:')) OR $(QtInstallRegDir.StartsWith('WSL:')) )"
+      >$(QtInstallRegDir.Split(':')[1])</QtInstallDir>
+    <QtInstallDir
+      Condition="'$(ApplicationType)' == 'Linux' AND '$(QtInstallDir)' == ''"
+      >$(QtInstall)</QtInstallDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(QtInstallDir)' != ''">
+    <QtToolsPath Condition="'$(QtToolsPath)' == ''"
+      >$([System.IO.Path]::Combine('$(QtInstallDir)','$(QtPathBinaries)').Replace('\', '/'))</QtToolsPath>
+    <QtDllPath Condition="'$(QtDllPath)' == ''"
+      >$([System.IO.Path]::Combine('$(QtInstallDir)','$(QtPathLibraryExecutables)').Replace('\', '/'))</QtDllPath>
+    <QTDIR>$(QtInstallDir)</QTDIR>
+  </PropertyGroup>
+
+  <!--
+  /////////////////////////////////////////////////////////////////////////////////////////////////
+  // Qt Variables Expansion
+  // -->
+  <PropertyGroup Condition="'$(QtVsProjectSettings)' == 'true'">
+
+    <!--// Path to Qt variables property file -->
+    <QtVarsOutputDir Condition="'$(QtVarsOutputDir)' == ''"
+      >$([System.IO.Path]::Combine('$(ProjectDir)', '$(IntDir)', 'qmake'))</QtVarsOutputDir>
+    <QtVarsFileName Condition="'$(QtVarsFileName)' == ''"
+      >qtvars_$(Platform.Replace(' ','_'))_$(Configuration.Replace(' ','_')).props</QtVarsFileName>
+    <QtVarsFilePath Condition="'$(QtVarsFilePath)' == ''"
+      >$(QtVarsOutputDir)\$(QtVarsFileName)</QtVarsFilePath>
+
+    <!--// Path to temp work folder -->
+    <QtVarsWorkDirName
+      >temp</QtVarsWorkDirName>
+    <QtVarsWorkDir
+      >$([System.IO.Path]::Combine('$(QtVarsOutputDir)','$(QtVarsWorkDirName)'))</QtVarsWorkDir>
+    <QtVarsWorkPath
+      >$(QtVarsWorkDir)\$(QtVarsFileName)</QtVarsWorkPath>
+    <QtVarsIndexPathDesignTime
+      >$(QtVarsWorkDir)\$(ProjectGuid.Replace('{','').Replace('}','')).$(ProjectName).designtime.idx</QtVarsIndexPathDesignTime>
+    <QtVarsDesignTime Condition="Exists('$(QtVarsIndexPathDesignTime)')"
+      >$([System.String]::Copy($([System.IO.File]::ReadAllText('$(QtVarsIndexPathDesignTime)'))).Replace('&#xD;&#xA;',''))</QtVarsDesignTime>
+  </PropertyGroup>
+
+  <!--// Import Qt variables (full build) -->
+  <Import
+    Condition="'$(DesignTimeBuild)' != 'true' AND Exists('$(QtVarsFilePath)')"
+    Project="$(QtVarsFilePath)"/>
+
+  <!--// Import Qt variables (design-time build) -->
+  <Import
+    Condition="'$(DesignTimeBuild)' == 'true' AND Exists('$(QtVarsDesignTime)')"
+    Project="$(QtVarsDesignTime)"/>
+
+  <!--// Import Qt variables (fall-back) -->
+  <Import
+    Condition=
+"'$(DesignTimeBuild)' == 'true' AND !Exists('$(QtVarsDesignTime)') AND Exists('$(QtVarsFilePath)')"
+    Project="$(QtVarsFilePath)"/>
+
+  <!--
+  /////////////////////////////////////////////////////////////////////////////////////////////////
+  // Add Qt DLL path to debugger definitions
+  // -->
+  <PropertyGroup>
+    <LocalDebuggerEnvironment  Condition="'$(QtDllPath)' != ''"
+      >PATH=%PATH%;$(QtDllPath)&#xD;&#xA;$(LocalDebuggerEnvironment)
+    </LocalDebuggerEnvironment>
+  </PropertyGroup>
+
+  <!--
+  /////////////////////////////////////////////////////////////////////////////////////////////////
+  // QML debugging
+  // -->
+  <PropertyGroup>
+    <QmlDebug Condition="'$(QtQMLDebugEnable)' == 'true'"
+      >-qmljsdebugger=file:$(ProjectGuid),block</QmlDebug>
+    <LocalDebuggerCommandArguments
+      >$(QmlDebug)</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+
+  <!--
+  /////////////////////////////////////////////////////////////////////////////////////////////////
+  // Outer build
+  // -->
+  <PropertyGroup>
+    <QtOuterBuildPrepare Condition="'$(QtOuterBuildPrepare)' == ''"
+      >ResolveReferences;PrepareForBuild;InitializeBuildStatus</QtOuterBuildPrepare>
+    <QtOuterBuildFinalize Condition="'$(QtOuterBuildFinalize)' == ''"
+      >FinalizeBuildStatus</QtOuterBuildFinalize>
+  </PropertyGroup>
+
+  <!--
+  /////////////////////////////////////////////////////////////////////////////////////////////////
+  // Extract Qt build settings from qmake-generated project files
+  // -->
+  <PropertyGroup>
+    <QtVars
+      Condition="'$(QtQMakeTemplate)' == 'app'"
+      >$(QMake_Makefile)</QtVars>
+    <QtVars
+      Condition="'$(QtQMakeTemplate)' == 'vcapp'"
+      >$(QMake_MSBuild);</QtVars>
+  </PropertyGroup>
+
+  <!--
+  /////////////////////////////////////////////////////////////////////////////////////////////////
+  // Default item metadata
+  // -->
+  <ItemDefinitionGroup>
+
+    <!--// C++ -->
+    <ClCompile>
+      <PreprocessorDefinitions Condition="'$(Qt_DEFINES_)' != ''"
+        >$(Qt_DEFINES_);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(QtQMLDebugEnable)' == 'true'"
+        >QT_QML_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories Condition="'$(Qt_INCLUDEPATH_)' != ''"
+        >%(AdditionalIncludeDirectories);$(Qt_INCLUDEPATH_)</AdditionalIncludeDirectories>
+      <LanguageStandard Condition="'$(Qt_STDCPP_)' != ''"
+        >$(Qt_STDCPP_)</LanguageStandard>
+      <AdditionalOptions Condition="'$(Qt_CL_OPTIONS_)' != ''"
+        >$(Qt_CL_OPTIONS_) %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+
+    <!--// Linker (.obj files) -->
+    <Link>
+      <AdditionalDependencies Condition="'$(Qt_LIBS_)' != ''"
+        >%(AdditionalDependencies);$(Qt_LIBS_)</AdditionalDependencies>
+      <AdditionalLibraryDirectories Condition="'$(Qt_LIBPATH_)' != ''"
+        >%(AdditionalLibraryDirectories);$(Qt_LIBPATH_)</AdditionalLibraryDirectories>
+      <SharedLibrarySearchPath Condition="'$(Qt_LIBPATH_)' != ''"
+        >%(SharedLibrarySearchPath);$(Qt_LIBPATH_)</SharedLibrarySearchPath>
+      <AdditionalOptions Condition="'$(Qt_LINK_OPTIONS_)' != ''"
+        >$(Qt_LINK_OPTIONS_) %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+
+  <!--
+  /////////////////////////////////////////////////////////////////////////////////////////////////
+  // Check static plugin import:
+  //  * If qmake generated a platform plugin import, assume QML plugins are also required.
+  // -->
+  <PropertyGroup Condition="Exists('$(QtVarsWorkDir)\qtvars_plugin_import.cpp')">
+    <QtStaticPlugins>true</QtStaticPlugins>
+  </PropertyGroup>
+
+  <!--
+  /////////////////////////////////////////////////////////////////////////////////////////////////
+  // Exclude Qt headers from code analysis
+  // -->
+  <PropertyGroup>
+    <CAExcludePath>$(CAExcludePath);$(Qt_INCLUDEPATH_)</CAExcludePath>
+  </PropertyGroup>
+
+  <!--
+  /////////////////////////////////////////////////////////////////////////////////////////////////
+  // Evaluate subfolder properties
+  // -->
+  <Import
+    Project="$(QtMsBuildProps)"/>
+
+</Project>
