@@ -102,6 +102,29 @@ bool bindXuid(string name, string xuid) {
 	return false;
 }
 
+YAML::Node queryXboxID(string type,string arg) {
+	YAML::Node player = YAML::LoadFile("data/player.yml");
+	//迭代搜索
+	for (YAML::Node i : player) {
+		if (type == "qq") {
+			if (i["qq"].as<string>() == arg) {
+				return i;
+			}
+		}
+		else if (type == "player") {
+			if (i["playerName"].as<string>() == arg) {
+				return i;
+			}
+		}
+		else if (type == "xuid") {
+			if (i["xuid"].as<string>() == arg) {
+				return i;
+			}
+		}
+	}
+	return {};
+}
+
 QString stdString2QString(std::string str) {
 	QByteArray byteArray(str.c_str(), str.length());
 	QString msg = byteArray;

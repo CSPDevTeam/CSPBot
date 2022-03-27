@@ -568,7 +568,7 @@ void CSPBot::InitRegularTableView(QTableView* t, string head[], int head_length)
         //隐藏列表头
         t->verticalHeader()->hide();
 
-        //setModel
+        //setModel.
         t->setModel(m_model);
         //居中显示并设置文本
         int in = 0;

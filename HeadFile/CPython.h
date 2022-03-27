@@ -48,6 +48,7 @@ enum EventCode
 	onRecall, //OK
 	onConnectError, //OK
 	onConnectLost, //OK
+	onConsoleUpdate, //OK
 };
 
 inline std::unordered_map<EventCode, vector<py::function>> g_cb_functions;

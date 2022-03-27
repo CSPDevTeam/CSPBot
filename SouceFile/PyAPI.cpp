@@ -4,8 +4,11 @@
 #include "server.h"
 #include "mirai.h"
 #include "qmessagebox.h"
+#include <tojson.hpp>
 
 using namespace std;
+using namespace tojson;
+//using namespace tojson::emitters;
 
 //API
 QString stdString2QString(std::string str);
@@ -35,6 +38,7 @@ enum SelfStandardButton {
 	RestoreDefaults,
 };
 
+//######################### Logger #########################
 
 struct PyLogger {
 	Logger thiz;
@@ -46,15 +50,19 @@ struct PyLogger {
 	void error(const string& msg) { thiz.error(msg); }
 };
 
+//######################### CSPBot #########################
 //API
 string getVersion() {
 	return Version;
 }
 
+//######################### Server #########################
+
 bool runcmd(const string& cmd) {
 	return server->sendCmd(cmd);
 }
 
+//######################### Mirai #########################
 //Mirai API
 void sendGroup(const string& group, const string& msg) {
 	std::unordered_map<string,string> data;
@@ -88,6 +96,8 @@ void sendPacket(const string& packet) {
 	win->ThreadMiraiSendAPI("sendPacket", data);
 }
 
+//######################### Listener #########################
+
 //设置监听器
 void EnableListener(EventCode evc);
 bool setListener(const string& eventName, const py::function& func) {
@@ -100,6 +110,9 @@ bool setListener(const string& eventName, const py::function& func) {
 	return true;
 }
 
+
+
+//######################### Motd #########################
 string motdbe(string host);
 string motdje(string host);
 
@@ -123,6 +136,8 @@ string pymotdbe(const string& host) {
 		return "{}";
 	}
 }
+
+//######################### Window  #########################
 
 string QButtonToString(QMessageBox::StandardButton c)
 {
@@ -317,9 +332,10 @@ string ShowTipWindow(
 	}
 
 	//返回值
-	qDebug() << stdString2QString(QButtonToString(Choosedbtn)) << (Choosedbtn == QMessageBox::Yes);
 	return QButtonToString(Choosedbtn);
 }
+
+//######################### API List #########################
 
 py::list getAllAPIList() {
 	py::list apilist;
@@ -336,8 +352,11 @@ py::list getAllAPIList() {
 	apilist.append("motdje");
 	apilist.append("tip");
 	apilist.append("getAllAPIList");
+	apilist.append("queryData");
 	return apilist;
 }
+
+//######################### Command #########################
 
 bool registerCommand(const string& cmd, py::function cbf) {
 	if (command.find(cmd) != command.end()&&
@@ -354,6 +373,23 @@ bool registerCommand(const string& cmd, py::function cbf) {
 	command.emplace(cmd, cbf);
 	return true;
 }
+
+//######################### Player #########################
+YAML::Node queryXboxID(string type, string arg);
+
+py::dict queryInfo(const string& type, const string& arg) {
+	if (type != "qq" && type != "xuid" && type != "player") {
+		throw py::value_error("Invalid type:" + type);
+	}
+
+	auto queryData = queryXboxID(type, arg);
+	string j = yaml2json(YAML::Dump(queryData)).dump();
+	py::module Py_json = py::module::import("json");
+	py::dict queryData_Dict = Py_json.attr("loads")(j);
+	return queryData_Dict;
+}
+
+//######################### Module #########################
 
 PYBIND11_EMBEDDED_MODULE(bot, m) {
 	using py::literals::operator""_a;
@@ -381,6 +417,12 @@ PYBIND11_EMBEDDED_MODULE(bot, m) {
 		.def("tip", &ShowTipWindow)
 		.def("getAllAPIList",&getAllAPIList)
 		.def("registerCommand", &registerCommand);
+		;
+#pragma endregion
+
+#pragma region Players
+		m
+			.def("queryData", &queryInfo);
 		;
 #pragma endregion
 }

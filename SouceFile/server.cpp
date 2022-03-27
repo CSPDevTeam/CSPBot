@@ -151,6 +151,11 @@ void Server::run() {
 						QString qline = stdString2QString(_line);
 						catchInfo(qline);
 						selfCatchLine(qline);
+
+						//Callback 
+						std::unordered_map<string, string> p;
+						p.emplace("line", _line);
+						win->OtherCallback("onConsoleUpdate", p);
 					}
 				}
 			}
