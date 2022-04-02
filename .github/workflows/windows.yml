@@ -93,7 +93,6 @@ jobs:
           path: D:/out/BuildConfig
 
       - name: Compress to zip
-        if: startsWith(github.ref, 'refs/tags/')
         run: |
           7z a D:/out/CSPBot.zip D:/out/BuildConfig
         shell: bash
