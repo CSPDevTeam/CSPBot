@@ -108,15 +108,17 @@ jobs:
         env:
             GITHUB_REPOSITORY: HuoHuas001/CSPBot
 
-      - name: Upload to OSS
-        uses: tvrcgo/upload-to-oss@v0.1.1
+
+      - name: Upload COS
+        uses: Bluefissure/tencent-cos-action@v0.1.1
         with:
-          key-id: ${{ secrets.OSS_KEY_ID }}
-          key-secret: ${{ secrets.OSS_KEY_SECRET }}
-          region: oss-cn-hongkong
+          args: upload D:/out/CSPBot.zip /core/${{ github.ref_name }}-${{ steps.vars.outputs.sha_short }}/
+          secret_id: ${{ secrets.OSS_KEY_ID }}
+          secret_key: ${{ secrets.OSS_KEY_SECRET }}
           bucket: huohua-core-1300379610
-          asset-path: D:/out/CSPBot.zip
-          target-path: /core/${{ github.ref_name }}-${{ steps.vars.outputs.sha_short }}/
+          region: ap-hongkong
+          accelerate: false
+
 
 
   Clean:
