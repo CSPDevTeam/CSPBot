@@ -153,7 +153,7 @@ void onText(WebSocketClient& client, string msg) {
 						msg += u8" [转发的消息]";
 					}
 					else if (i["type"] == "File") {
-						msg += u8" [文件]" + i["name"];
+						msg += u8" [文件]" + i["name"].get<string>();
 					}
 					else if (i["type"] == "Source") {}
 					else {

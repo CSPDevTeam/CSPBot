@@ -30,10 +30,14 @@ public:
 	inline void info(string msg, const Args&... args) {
 		try {
 			string str = fmt::format(msg, args...);
-			win->inlog("< font color = \"#008000\">" + getTime() + " I /" + Module + ": " + str + "\n</font>");
+			if (getLevel() <= 2) {
+				win->inlog("< font color = \"#008000\">" + getTime() + " I /" + Module + ": " + str + "\n</font>");
+			}
 		}
 		catch (...) {
-			win->inlog("< font color = \"#008000\">" + getTime() + " I /" + Module + ": " + msg + "\n</font>");
+			if (getLevel() <= 2) {
+				win->inlog("< font color = \"#008000\">" + getTime() + " I /" + Module + ": " + msg + "\n</font>");
+			}
 		}
 		
 	};
@@ -41,20 +45,28 @@ public:
 	inline void error(string msg, const Args&... args) {
 		try {
 			string str = fmt::format(msg, args...);
-			win->inlog("< font color = \"#FF0000\">" + getTime() + " E /" + Module + ": " + str + "\n</font>");
+			if (getLevel() <= 4) {
+				win->inlog("< font color = \"#FF0000\">" + getTime() + " E /" + Module + ": " + str + "\n</font>");
+			}
 		}
 		catch (...) {
-			win->inlog("< font color = \"#FF0000\">" + getTime() + " E /" + Module + ": " + msg + "\n</font>");
+			if (getLevel() <= 4) {
+				win->inlog("< font color = \"#FF0000\">" + getTime() + " E /" + Module + ": " + msg + "\n</font>");
+			}
 		}
 	};
 	template <typename... Args>
 	inline void warn(string msg, const Args&... args) {
 		try {
 			string str = fmt::format(msg, args...);
-			win->inlog("< font color = \"#FFCC66\">" + getTime() + " W /" + Module + ": " + str + "\n</font>");
+			if (getLevel() <= 3) {
+				win->inlog("< font color = \"#FFCC66\">" + getTime() + " W /" + Module + ": " + str + "\n</font>");
+			}
 		}
 		catch (...) {
-			win->inlog("< font color = \"#FFCC66\">" + getTime() + " W /" + Module + ": " + msg + "\n</font>");
+			if (getLevel() <= 3) {
+				win->inlog("< font color = \"#6699FF\">" + getTime() + " D /" + Module + ": " + msg + "\n</font>");
+			}
 		}
 		
 	};
@@ -62,10 +74,14 @@ public:
 	inline void debug(string msg, const Args&... args) {
 		try {
 			string str = fmt::format(msg, args...);
-			win->inlog("< font color = \"#6699FF\">" + getTime() + " D /" + Module + ": " + str + "\n</font>");
+			if (getLevel() <= 1) {
+				win->inlog("< font color = \"#6699FF\">" + getTime() + " D /" + Module + ": " + str + "\n</font>");
+			}
 		}
 		catch (...) {
-			win->inlog("< font color = \"#6699FF\">" + getTime() + " D /" + Module + ": " + msg + "\n</font>");
+			if (getLevel() <= 1) {
+				win->inlog("< font color = \"#6699FF\">" + getTime() + " D /" + Module + ": " + msg + "\n</font>");
+			}
 		}
 	};
 private:

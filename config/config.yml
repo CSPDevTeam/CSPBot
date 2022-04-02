@@ -9,7 +9,7 @@ qq: 3544175039
 
 #发消息群聊
 group: 
-  - 615056067
+  - 611424871
 
 #有权限操作机器人的qq
 admin:
@@ -19,7 +19,7 @@ admin:
 stopCmd: stop
 
 #最低输出等级
-LoggerLevel: debug
+LoggerLevel: info
 
 #控制台自动染色
 ConsoleColor: true
