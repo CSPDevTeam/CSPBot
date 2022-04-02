@@ -108,17 +108,6 @@ jobs:
         env:
             GITHUB_REPOSITORY: HuoHuas001/CSPBot
 
-
-      - name: Upload COS
-        uses: Bluefissure/tencent-cos-action@v0.1.1
-        with:
-          args: upload D:/out/CSPBot.zip /core/${{ github.ref_name }}-${{ steps.vars.outputs.sha_short }}/
-          secret_id: ${{ secrets.OSS_KEY_ID }}
-          secret_key: ${{ secrets.OSS_KEY_SECRET }}
-          bucket: huohua-core-1300379610
-          region: ap-hongkong
-          accelerate: false
-
       - name: Upload COS
         uses: TencentCloud/cos-action@v1
         with:
