@@ -24,7 +24,7 @@ using namespace std;
 
 CSPBot* win;
 Server* server = new Server();
-std::string Version = "v0.0.5";
+std::string Version = "v0.0.6";
 int configVersion = 2;
 
 string getConfig(string key) {
