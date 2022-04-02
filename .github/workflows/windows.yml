@@ -115,7 +115,7 @@ jobs:
           key-id: ${{ secrets.OSS_KEY_ID }}
           key-secret: ${{ secrets.OSS_KEY_SECRET }}
           region: oss-cn-hongkong
-          bucket: CSPBot
+          bucket: huohua-core-1300379610
           asset-path: D:/out/CSPBot.zip
           target-path: /core/${{ github.ref_name }}-${{ steps.vars.outputs.sha_short }}/
 
