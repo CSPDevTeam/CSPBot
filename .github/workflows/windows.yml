@@ -94,7 +94,7 @@ jobs:
 
       - name: Compress to zip
         run: |
-          7z a D:/out/CSPBot.zip D:/out/BuildConfig
+          7z a D:/out/zip/CSPBot-${{ steps.vars.outputs.sha_short }}.zip D:/out/BuildConfig
         shell: bash
 
       - name: Release
@@ -104,7 +104,7 @@ jobs:
           name: CSPBot Release ${{env.RELEASE_TAG}}
           body_path: ./CHANGELOG.md
           files: |
-            D:/out/CSPBot.zip
+            D:/out/zip/CSPBot-${{ steps.vars.outputs.sha_short }}.zip
         env:
             GITHUB_REPOSITORY: HuoHuas001/CSPBot
 
@@ -115,9 +115,9 @@ jobs:
           secret_key: ${{ secrets.OSS_KEY_SECRET }}
           cos_bucket: huohua-core-1300379610
           cos_region: ap-hongkong
-          local_path: D:/out/
-          remote_path: core-out
-          clean: true
+          local_path: D:/out/zip/
+          remote_path: core-out/
+          clean: false
 
 
 
