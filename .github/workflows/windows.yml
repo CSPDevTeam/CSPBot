@@ -109,6 +109,10 @@ jobs:
             GITHUB_REPOSITORY: HuoHuas001/CSPBot
 
 
+  Upload-OSS:
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
       - name: Upload COS
         uses: Bluefissure/tencent-cos-action@v0.1.1
         with:
@@ -118,7 +122,6 @@ jobs:
           bucket: huohua-core-1300379610
           region: ap-hongkong
           accelerate: false
-
 
 
   Clean:
